@@ -51,29 +51,21 @@
       justify-content: center;
       gap: 60px;
       min-height: 460px;
-    }
-    .hero-photo {
-      flex-shrink: 0;
-      width: 220px;
-      height: 220px;
-      border-radius: 50%;
+      position: relative;
       overflow: hidden;
-      border: 4px solid rgba(255,255,255,0.15);
-      background: #1e3a5f;
     }
-    .hero-photo img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    .hero-visual {
+      flex-shrink: 0;
+      width: 280px;
+      height: 280px;
+      position: relative;
     }
-    .hero-photo-placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 60px;
-      color: rgba(255,255,255,0.3);
+    #neuralCanvas {
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      border: 1px solid rgba(99, 179, 255, 0.2);
+      box-shadow: 0 0 60px rgba(29, 111, 245, 0.15);
     }
     .hero-text {
       max-width: 540px;
@@ -310,9 +302,8 @@
 
   <!-- HERO -->
   <section class="hero">
-    <div class="hero-photo">
-      <!-- Replace src with your actual photo -->
-      <img src="photo_face.jpg" alt="שביט זמיר" />
+    <div class="hero-visual">
+      <canvas id="neuralCanvas" width="280" height="280"></canvas>
     </div>
     <div class="hero-text">
       <h1>מהקהילייה המודיעינית<br />לחזית ה-AI</h1>
@@ -415,5 +406,89 @@
     <p>© 2026 שביט זמיר · כל הזכויות שמורות · <a href="mailto:zamir.shavit@gmail.com" style="color:#6a8caf;">zamir.shavit@gmail.com</a></p>
   </footer>
 
+  <script>
+    const canvas = document.getElementById('neuralCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+    const cx = W / 2, cy = H / 2, R = W / 2;
+
+    const nodes = Array.from({ length: 38 }, () => ({
+      x: cx + (Math.random() - 0.5) * W * 0.85,
+      y: cy + (Math.random() - 0.5) * H * 0.85,
+      vx: (Math.random() - 0.5) * 0.4,
+      vy: (Math.random() - 0.5) * 0.4,
+      r: Math.random() * 2 + 1.2
+    }));
+
+    function insideCircle(x, y) {
+      return (x - cx) ** 2 + (y - cy) ** 2 < (R - 6) ** 2;
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+
+      // Dark background inside circle
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(cx, cy, R - 1, 0, Math.PI * 2);
+      ctx.fillStyle = '#0b1a2e';
+      ctx.fill();
+      ctx.clip();
+
+      // Connections
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x;
+          const dy = nodes[i].y - nodes[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 90) {
+            const alpha = (1 - dist / 90) * 0.45;
+            ctx.strokeStyle = `rgba(99,179,255,${alpha})`;
+            ctx.lineWidth = 0.7;
+            ctx.beginPath();
+            ctx.moveTo(nodes[i].x, nodes[i].y);
+            ctx.lineTo(nodes[j].x, nodes[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+
+      // Nodes
+      nodes.forEach(n => {
+        const grd = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 2.5);
+        grd.addColorStop(0, 'rgba(99,179,255,0.95)');
+        grd.addColorStop(1, 'rgba(29,111,245,0)');
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r * 2.5, 0, Math.PI * 2);
+        ctx.fillStyle = grd;
+        ctx.fill();
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fillStyle = '#63b3ff';
+        ctx.fill();
+      });
+
+      ctx.restore();
+    }
+
+    function update() {
+      nodes.forEach(n => {
+        n.x += n.vx;
+        n.y += n.vy;
+        if (!insideCircle(n.x + n.vx * 5, n.y)) n.vx *= -1;
+        if (!insideCircle(n.x, n.y + n.vy * 5)) n.vy *= -1;
+        if (!insideCircle(n.x, n.y)) {
+          n.vx = (cx - n.x) * 0.02;
+          n.vy = (cy - n.y) * 0.02;
+        }
+      });
+    }
+
+    (function loop() {
+      update();
+      draw();
+      requestAnimationFrame(loop);
+    })();
+  </script>
 </body>
 </html>

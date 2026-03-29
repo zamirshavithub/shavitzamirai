@@ -197,6 +197,26 @@
       transition: border-color 0.2s;
     }
     .about a:hover { border-color: #1d6ff5; }
+    .social-links {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      margin-top: 8px;
+    }
+    .social-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border: 1.5px solid #1d6ff5;
+      border-radius: 6px;
+      color: #1d6ff5;
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .social-btn:hover { background: #1d6ff5; color: #fff; border-color: #1d6ff5; }
 
     /* ─── SERVICES ─── */
     .services {
@@ -343,7 +363,16 @@
     <p>
       אני שביט זמיר — מומחה בינה מלאכותית וסייבר עם רקע מהקהילייה המודיעינית. אחרי קורס סייבר ביחידה 8200 ולימודי הנדסת נתונים בטכניון, אני עוזר לאנשים ולחברות להפוך את ה-AI לאיזון לכלי חזק שיש להם. בנוסף, אני יזם וייסד סטארטאפ בתחום ה-AI, שם אני מיישם את הידע שלי בפועל ובונה פתרונות חדשניים. אני לא מלמד תיאוריה — אני מלמד מה שעובד בפועל.
     </p>
-    <a href="#contact">קראו עוד עלי ←</a>
+    <div class="social-links">
+      <a href="https://www.instagram.com/shavitzamirai" target="_blank" class="social-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
+        Instagram
+      </a>
+      <a href="https://www.tiktok.com/@shavitzamir" target="_blank" class="social-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+        TikTok
+      </a>
+    </div>
   </section>
 
   <!-- SERVICES -->

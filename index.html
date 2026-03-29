@@ -54,18 +54,17 @@
       position: relative;
       overflow: hidden;
     }
-    .hero-visual {
-      flex-shrink: 0;
-      width: 280px;
-      height: 280px;
-      position: relative;
-    }
     #neuralCanvas {
-      width: 280px;
-      height: 280px;
-      border-radius: 50%;
-      border: 1px solid rgba(99, 179, 255, 0.2);
-      box-shadow: 0 0 60px rgba(29, 111, 245, 0.15);
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .hero > * {
+      position: relative;
+      z-index: 1;
     }
     .hero-text {
       max-width: 540px;
@@ -302,9 +301,7 @@
 
   <!-- HERO -->
   <section class="hero">
-    <div class="hero-visual">
-      <canvas id="neuralCanvas" width="280" height="280"></canvas>
-    </div>
+    <canvas id="neuralCanvas"></canvas>
     <div class="hero-text">
       <h1>מהקהילייה המודיעינית<br />לחזית ה-AI</h1>
       <p>אני מלמד אנשים וחברות להשתמש בבינה מלאכותית כדי לעבוד חכם יותר — עם הרקע של יוצא 8200 ובוגר הנדסת נתונים בטכניון.</p>
@@ -409,42 +406,38 @@
   <script>
     const canvas = document.getElementById('neuralCanvas');
     const ctx = canvas.getContext('2d');
-    const W = canvas.width, H = canvas.height;
-    const cx = W / 2, cy = H / 2, R = W / 2;
 
-    const nodes = Array.from({ length: 38 }, () => ({
-      x: cx + (Math.random() - 0.5) * W * 0.85,
-      y: cy + (Math.random() - 0.5) * H * 0.85,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: (Math.random() - 0.5) * 0.4,
-      r: Math.random() * 2 + 1.2
-    }));
-
-    function insideCircle(x, y) {
-      return (x - cx) ** 2 + (y - cy) ** 2 < (R - 6) ** 2;
+    function resize() {
+      const hero = canvas.parentElement;
+      canvas.width = hero.offsetWidth;
+      canvas.height = hero.offsetHeight;
     }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function makeNodes() {
+      return Array.from({ length: 60 }, () => ({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        r: Math.random() * 1.8 + 0.8
+      }));
+    }
+    let nodes = makeNodes();
+    window.addEventListener('resize', () => { nodes = makeNodes(); });
 
     function draw() {
-      ctx.clearRect(0, 0, W, H);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Dark background inside circle
-      ctx.save();
-      ctx.beginPath();
-      ctx.arc(cx, cy, R - 1, 0, Math.PI * 2);
-      ctx.fillStyle = '#0b1a2e';
-      ctx.fill();
-      ctx.clip();
-
-      // Connections
       for (let i = 0; i < nodes.length; i++) {
         for (let j = i + 1; j < nodes.length; j++) {
           const dx = nodes[i].x - nodes[j].x;
           const dy = nodes[i].y - nodes[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 90) {
-            const alpha = (1 - dist / 90) * 0.45;
-            ctx.strokeStyle = `rgba(99,179,255,${alpha})`;
-            ctx.lineWidth = 0.7;
+          if (dist < 130) {
+            ctx.strokeStyle = `rgba(99,179,255,${(1 - dist / 130) * 0.35})`;
+            ctx.lineWidth = 0.6;
             ctx.beginPath();
             ctx.moveTo(nodes[i].x, nodes[i].y);
             ctx.lineTo(nodes[j].x, nodes[j].y);
@@ -453,13 +446,12 @@
         }
       }
 
-      // Nodes
       nodes.forEach(n => {
-        const grd = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 2.5);
-        grd.addColorStop(0, 'rgba(99,179,255,0.95)');
+        const grd = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 3);
+        grd.addColorStop(0, 'rgba(99,179,255,0.9)');
         grd.addColorStop(1, 'rgba(29,111,245,0)');
         ctx.beginPath();
-        ctx.arc(n.x, n.y, n.r * 2.5, 0, Math.PI * 2);
+        ctx.arc(n.x, n.y, n.r * 3, 0, Math.PI * 2);
         ctx.fillStyle = grd;
         ctx.fill();
         ctx.beginPath();
@@ -467,20 +459,14 @@
         ctx.fillStyle = '#63b3ff';
         ctx.fill();
       });
-
-      ctx.restore();
     }
 
     function update() {
       nodes.forEach(n => {
         n.x += n.vx;
         n.y += n.vy;
-        if (!insideCircle(n.x + n.vx * 5, n.y)) n.vx *= -1;
-        if (!insideCircle(n.x, n.y + n.vy * 5)) n.vy *= -1;
-        if (!insideCircle(n.x, n.y)) {
-          n.vx = (cx - n.x) * 0.02;
-          n.vy = (cy - n.y) * 0.02;
-        }
+        if (n.x < 0 || n.x > canvas.width) n.vx *= -1;
+        if (n.y < 0 || n.y > canvas.height) n.vy *= -1;
       });
     }
 

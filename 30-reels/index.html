@@ -442,6 +442,15 @@
       .inside-grid { grid-template-columns: 1fr; }
       .timeline { grid-template-columns: 1fr; }
     }
+  
+    .opt-in-form { flex-direction: column; }
+    .opt-in-form .row { display: flex; gap: 10px; width: 100%; }
+    .opt-in-form .row > * { flex: 1; }
+    .opt-in-form input { width: 100%; }
+    @media (max-width: 600px) {
+      .opt-in-form .row { flex-direction: column; }
+    }
+
   </style>
 </head>
 <body>
@@ -759,6 +768,11 @@ Hard requirements:
         <input type="hidden" name="_next" value="https://shavitzamirai.com/30-reels.html?subscribed=true" />
         <input type="hidden" name="source" value="30-reels-page" />
         <input type="email" name="email" placeholder="האימייל שלך" required />
+        <div class="row">
+          <input type="text" name="name" placeholder="שם (אופציונלי)" />
+          <input type="tel" name="phone" placeholder="טלפון (אופציונלי)" />
+        </div>
+        <input type="text" name="business_or_role" placeholder="שם עסק או תפקיד (אופציונלי)" />
         <button type="submit">אני בפנים</button>
       </form>
       <p class="privacy">לא משתפים את האימייל. לעולם.</p>

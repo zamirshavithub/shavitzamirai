@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Remotion + קלוד — URL לסרטון פרסומת ב-25 שניות | שביט זמיר</title>
+  <meta name="description" content="פרומפט שלוקח URL של אתר העסק ומחזיר סרטון פרסומת מוכן עם לוגו, צבעים ותמונות מוצר אמיתיות. חינם." />
+  <meta property="og:title" content="Remotion + קלוד — URL → סרטון פרסומת" />
+  <meta property="og:description" content="סקיל + פרומפט שמייצרים סרטון פרסומת של 25 שניות מתוך כתובת אתר. הלוגו, הצבעים והתמונות שלך — אוטומטי." />
+  <meta property="og:type" content="website" />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Heebo', sans-serif; background: #f5f5f5; color: #1a1a1a; direction: rtl; line-height: 1.6; }
+
+    nav { background: #0b1a2e; padding: 18px 60px; display: flex; justify-content: space-between; align-items: center; }
+    nav .logo { color: #fff; font-size: 18px; font-weight: 700; text-decoration: none; }
+    nav ul { list-style: none; display: flex; gap: 32px; }
+    nav ul li a { color: #ccd6f6; text-decoration: none; font-size: 15px; font-weight: 400; transition: color 0.2s; }
+    nav ul li a:hover { color: #fff; }
+
+    .hero { background: linear-gradient(135deg, #0b1a2e 0%, #1e0a2e 60%, #3a154d 100%); padding: 90px 60px 100px; text-align: center; position: relative; overflow: hidden; }
+    #neuralCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+    .hero > * { position: relative; z-index: 1; }
+    .hero .badge { display: inline-block; background: rgba(147,51,234,0.18); border: 1px solid rgba(147,51,234,0.5); color: #d8b4fe; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; margin-bottom: 24px; }
+    .hero h1 { font-size: 56px; font-weight: 800; color: #fff; line-height: 1.15; margin-bottom: 22px; max-width: 820px; margin-inline: auto; }
+    .hero .lede { font-size: 18px; color: #cbb1d9; line-height: 1.75; max-width: 700px; margin: 0 auto 36px; font-weight: 400; }
+    .hero-stats { display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; margin-bottom: 12px; }
+    .hero-stats .stat { text-align: center; }
+    .hero-stats .stat .num { display: block; font-size: 36px; font-weight: 800; color: #fff; line-height: 1; }
+    .hero-stats .stat .lbl { display: block; font-size: 13px; color: #a87fb8; margin-top: 6px; letter-spacing: 0.5px; }
+
+    section { padding: 80px 60px; }
+    .section-head { max-width: 720px; margin: 0 auto 48px; text-align: center; }
+    .section-head h2 { font-size: 36px; font-weight: 800; color: #0b1a2e; margin-bottom: 16px; }
+    .section-head p { font-size: 17px; color: #555; line-height: 1.75; }
+
+    .prompts { background: #fff; }
+    .prompt-block { max-width: 880px; margin: 0 auto 32px; background: #f5f7fb; border-radius: 14px; border: 1px solid #e6ecf5; overflow: hidden; }
+    .prompt-head { padding: 20px 28px; border-bottom: 1px solid #e6ecf5; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .prompt-head .label { display: flex; align-items: center; gap: 12px; }
+    .prompt-head .badge { background: #9333ea; color: #fff; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 12px; letter-spacing: 0.5px; }
+    .prompt-head h3 { font-size: 19px; font-weight: 700; color: #0b1a2e; }
+    .copy-btn { background: #0b1a2e; color: #fff; border: none; padding: 9px 18px; border-radius: 6px; font-size: 13px; font-weight: 600; font-family: 'Heebo', sans-serif; cursor: pointer; transition: background 0.2s; display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .copy-btn:hover { background: #1a3a6e; }
+    .copy-btn.copied { background: #22c55e; }
+    .prompt-intro { padding: 18px 28px 0; font-size: 15px; color: #555; line-height: 1.75; background: #f5f7fb; }
+    .prompt-intro strong { color: #0b1a2e; }
+    .prompt-body { padding: 24px 28px; direction: ltr; text-align: left; }
+    .prompt-body pre { font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 13.5px; line-height: 1.7; color: #1a1a1a; white-space: pre-wrap; word-wrap: break-word; max-height: 460px; overflow-y: auto; padding-left: 8px; }
+    .prompt-body pre::-webkit-scrollbar { width: 8px; }
+    .prompt-body pre::-webkit-scrollbar-thumb { background: #c0c8d6; border-radius: 4px; }
+
+    .how-use { background: linear-gradient(135deg, #0b1a2e 0%, #1e0a2e 100%); color: #fff; }
+    .how-use .section-head h2 { color: #fff; }
+    .how-use .section-head p { color: #cbb1d9; }
+    .how-use-flow { max-width: 760px; margin: 0 auto; }
+    .how-use-flow .step { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px 26px; margin-bottom: 14px; display: flex; gap: 18px; align-items: flex-start; transition: all 0.2s; }
+    .how-use-flow .step:hover { background: rgba(255,255,255,0.08); transform: translateX(-3px); }
+    .how-use-flow .step-num { background: #9333ea; color: #fff; width: 36px; height: 36px; border-radius: 50%; text-align: center; line-height: 36px; font-weight: 700; font-size: 16px; flex-shrink: 0; }
+    .how-use-flow .step-body h4 { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .how-use-flow .step-body p { font-size: 14px; color: #cbb1d9; line-height: 1.7; }
+
+    .opt-in { background: #fff; padding-bottom: 90px; }
+    .opt-in-card { max-width: 620px; margin: 0 auto; background: #f5f7fb; border: 1px solid #e6ecf5; border-radius: 16px; padding: 40px 36px; text-align: center; }
+    .opt-in-card h3 { font-size: 24px; font-weight: 800; color: #0b1a2e; margin-bottom: 12px; }
+    .opt-in-card p { font-size: 15px; color: #555; line-height: 1.7; margin-bottom: 22px; }
+    .opt-in-form { display: flex; flex-direction: column; gap: 10px; max-width: 460px; margin: 0 auto; }
+    .opt-in-form .row { display: flex; gap: 10px; }
+    .opt-in-form .row > * { flex: 1; }
+    .opt-in-form input { padding: 12px 16px; border-radius: 8px; border: 1.5px solid #d0d8e6; background: #fff; font-size: 15px; font-family: 'Heebo', sans-serif; direction: rtl; outline: none; transition: border-color 0.2s; width: 100%; }
+    .opt-in-form input:focus { border-color: #9333ea; }
+    .opt-in-form button { background: #9333ea; color: #fff; border: none; padding: 13px 28px; border-radius: 8px; font-size: 15px; font-weight: 700; font-family: 'Heebo', sans-serif; cursor: pointer; margin-top: 4px; }
+    .opt-in-form button:hover { background: #7e22ce; }
+    .opt-in-card .privacy { font-size: 12px; color: #888; margin-top: 14px; }
+    .opt-in-form .row.optional { opacity: 0.92; }
+    .opt-in-form input::placeholder { color: #97a3b6; }
+
+    footer { background: #0b1a2e; padding: 28px 60px; text-align: center; color: #6a8caf; font-size: 14px; }
+    footer a { color: #6a8caf; text-decoration: none; }
+    footer a:hover { color: #fff; }
+
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      nav ul { gap: 14px; }
+      .hero { padding: 60px 20px 70px; }
+      .hero h1 { font-size: 32px; }
+      .hero .lede { font-size: 15px; }
+      .hero-stats { gap: 28px; }
+      .hero-stats .stat .num { font-size: 28px; }
+      section { padding: 50px 20px; }
+      .section-head h2 { font-size: 26px; }
+      .prompt-head { flex-direction: column; align-items: flex-start; }
+      .copy-btn { width: 100%; justify-content: center; }
+      .opt-in-form .row { flex-direction: column; }
+      footer { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="logo">שביט זמיר</a>
+    <ul>
+      <li><a href="/#about">מי אני</a></li>
+      <li><a href="/#services">שירותים</a></li>
+      <li><a href="/#free">תכנים חינמיים</a></li>
+      <li><a href="/#contact">צור קשר</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <canvas id="neuralCanvas"></canvas>
+    <span class="badge">פרומפט · Remotion + Skill</span>
+    <h1>URL → סרטון<br/>פרסומת</h1>
+    <p class="lede">אתה נותן לקלוד כתובת אתר. הוא קורא, מוריד תמונות מוצר, וכותב סרטון פרסומת של 25 שניות עם הלוגו, הצבעים והפיצ&#x27;רים האמיתיים שלך. הפרומפט המלא + הוראות התקנת הסקיל.</p>
+    <div class="hero-stats">
+      <div class="stat"><span class="num">25s</span><span class="lbl">סרטון</span></div>
+      <div class="stat"><span class="num">6</span><span class="lbl">סצנות</span></div>
+      <div class="stat"><span class="num">3-7m</span><span class="lbl">זמן ריצה</span></div>
+    </div>
+  </section>
+
+  <section class="prompts">
+    <div class="section-head">
+      <h2>הפרומפט + הסקיל</h2>
+      <p>Remotion הוא כלי שיוצר וידאו מקוד React. קלוד יודע React טוב — אבל בלי סקיל הוא לא מכיר את Remotion. ברגע שהסקיל מותקן, הפרומפט הזה מספיק.</p>
+    </div>
+    <div class="prompt-block">
+      <div class="prompt-head">
+        <div class="label"><span class="badge">REMOTION</span><h3>הפרומפט המלא</h3></div>
+        <button class="copy-btn" data-target="prompt-1">📋 העתק</button>
+      </div>
+      <div class="prompt-intro"><strong>שלב מקדים — חובה:</strong> צריך שהסקיל "Remotion best practices" יהיה מותקן בקלוד (ראה הוראות בהמשך). אחרי שהסקיל קיים, החלף את <code>https://your-product-url.com</code> בכתובת האתר שלך והדבק לקלוד.</div>
+      <div class="prompt-body"><pre id="prompt-1">Use the Remotion best practices skill.
+
+Create a 25-second product demo and launch video (1080x1920, 30fps) for the product at https://your-product-url.com.
+
+SAFE ZONE: All text and key content must stay within the safe zone — at least 150px from the top and 170px from the bottom. Side margins: 60px minimum.
+
+MINIMUM FONT SIZES: Headlines 56px+, body/subtitles 36px+, labels 28px minimum.
+
+STEP 1 — RESEARCH &amp; ASSET DOWNLOAD:
+Visit the URL. Extract product name, logo, brand colors, tagline, core user flow, 3 key features, social proof.
+Download 2-3 product images the site already displays (hero images, UI screenshots, app previews) to public/product-1.png, product-2.png, etc.
+Show me what you found and a proposed 6-scene outline. Wait for approval before coding.
+
+STEP 2 — BUILD 6 SCENES:
+
+Scene 1 - Hook (3s): Pain-point question. Text slams in with spring from 2x scale. Dark background with brand-color radial glow.
+
+Scene 2 - Product Intro (3s): Logo/name scales in with spring. Tagline slides up. Particle burst with brand accent color.
+
+Scene 3 - Simulated Demo (8s): Recreate the core interaction as React components (no device frame — direct on dark background, 960px+ wide). Animated cursor moves to input -&gt; types -&gt; clicks button -&gt; loading spinner -&gt; results animate in. All text 36px+.
+
+Scene 4 - Product Image Showcase (5s): Display downloaded product images large (900px+ wide), centered, drop shadow, 16px rounded corners. Crossfade between 2-3 images with feature headline updating above/below each.
+
+Scene 5 - Feature Callouts (3s): Product image scales to 40% top. 3 feature lines stagger in from right with spring, icon + text (36px+) each.
+
+Scene 6 - Social Proof + CTA (3s): Number counts up from 0. Product URL pulses gently. Fade to black.
+
+CURSOR: White circle 12px, 50% opacity trail, smooth bezier paths. Never teleport.
+FONT: Inter (800 headlines, 400 body) or match site&#x27;s Google Font.
+
+After building, launch Remotion Studio (npx remotion studio) so I can preview in browser.</pre></div>
+    </div>
+    <div class="prompt-block">
+      <div class="prompt-head">
+        <div class="label"><span class="badge">SKILL</span><h3>הוראות להתקנת הסקיל בקוורק</h3></div>
+        <button class="copy-btn" data-target="prompt-2">📋 העתק</button>
+      </div>
+      <div class="prompt-intro">פעם אחת מתקינים את הסקיל — אחרי זה הוא זמין לכל הפרומפטים של Remotion. נדרש Cowork.</div>
+      <div class="prompt-body"><pre id="prompt-2">1. פתחו Cowork → Settings → Skills
+
+2. צרו תיקייה חדשה: remotion-best-practices/
+
+3. צרו בתוכה קובץ: SKILL.md
+
+4. הכניסו לתוך SKILL.md את הוראות ה-best practices:
+   - מבנה תיקיות סטנדרטי של פרויקט Remotion
+   - איך לבנות סצנות ב-React (Composition + Sequence)
+   - שימוש ב-spring(), interpolate(), useCurrentFrame()
+   - Safe Zone לפורמטים שונים (9:16, 16:9, 1:1)
+   - גדלי פונטים מינימליים לנייד
+   - ייצוא וידאו עם ffmpeg
+
+5. בכל פרומפט של Remotion — מתחילים עם השורה:
+   &quot;Use the Remotion best practices skill.&quot;
+
+6. קלוד יקרא את הסקיל ויעבוד לפיו — פחות טעויות, יותר עקביות בין סרטונים.
+
+טיפ: אפשר להעתיק SKILL.md מוכן מ-github.com/anthropic/skills או לבקש מקלוד עצמו לכתוב גרסה ראשונה לפי המבנה הזה.</pre></div>
+    </div>
+  </section>
+
+  <section class="how-use">
+    <div class="section-head">
+      <h2>איך משתמשים — צעד אחר צעד</h2>
+      <p>פעם אחת מגדירים. אחרי זה זה רץ לבד.</p>
+    </div>
+    <div class="how-use-flow">
+      <div class="step"><div class="step-num">1</div><div class="step-body"><h4>התקן את הסקיל פעם אחת</h4><p>Cowork → Settings → Skills. צור תיקייה remotion-best-practices ובה SKILL.md לפי ההוראות למעלה.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><h4>פתח שיחה חדשה בקלוד קוד</h4><p>קלוד קוד או Cowork — שיחה חדשה. הסקיל ייטען אוטומטית.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><h4>הדבק את הפרומפט עם ה-URL שלך</h4><p>החלף את הכתובת בדומיין של העסק או המוצר. שלח. קלוד יציע outline ל-6 סצנות לפני שיתחיל לקודד.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><h4>אשר את ה-outline → קלוד מקודד</h4><p>אישור → קלוד מוריד תמונות, כותב composition.tsx עם 6 סצנות, פותח Remotion Studio בדפדפן.</p></div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-body"><h4>צפה ב-Studio → ייצא ל-MP4</h4><p>Remotion Studio מאפשר תיקונים בזמן אמת. כשמרוצים — ייצוא MP4 לרילז ב-9:16.</p></div></div>
+    </div>
+  </section>
+
+  <section class="opt-in">
+    <div class="opt-in-card">
+      <h3>רוצה להישאר מעודכן?</h3>
+      <p>פעם בשבוע — פרק חדש בסדרה + פרומפט/תבנית כמו זאת. בלי ספאם, אפשר לצאת בכל זמן.</p>
+      <form class="opt-in-form" action="https://formsubmit.co/zamir.shavit@gmail.com" method="POST">
+        <input type="hidden" name="_subject" value="הרשמה — remotion" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_next" value="https://shavitzamirai.com/remotion/?subscribed=true" />
+        <input type="hidden" name="source" value="remotion-page" />
+        <input type="email" name="email" placeholder="האימייל שלך *" required />
+        <div class="row optional">
+          <input type="text" name="name" placeholder="שם (אופציונלי)" />
+          <input type="tel" name="phone" placeholder="טלפון (אופציונלי)" />
+        </div>
+        <input type="text" name="business_or_role" placeholder="שם עסק או תפקיד (אופציונלי)" />
+        <button type="submit">אני בפנים</button>
+      </form>
+      <p class="privacy">לא משתפים פרטים. לעולם.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 שביט זמיר · <a href="/">הביתה</a> · <a href="/best-employee-series/">סדרת העובד מקלוד</a> · <a href="mailto:zamir.shavit@gmail.com">zamir.shavit@gmail.com</a></p>
+  </footer>
+
+  <script>
+    // Copy buttons
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.target;
+        const target = document.getElementById(targetId);
+        if (!target) return;
+        const text = target.textContent;
+        navigator.clipboard.writeText(text).then(() => {
+          const originalText = btn.textContent;
+          btn.textContent = '✓ הועתק';
+          btn.classList.add('copied');
+          setTimeout(() => { btn.textContent = originalText; btn.classList.remove('copied'); }, 2000);
+        });
+      });
+    });
+
+    // Subscribed banner
+    if (new URLSearchParams(window.location.search).get('subscribed') === 'true') {
+      const card = document.querySelector('.opt-in-card');
+      if (card) card.innerHTML = '<h3 style="color:#22c55e;">✓ נרשמת בהצלחה</h3><p>תודה. הסיכום הראשון יגיע עד שבוע. בינתיים — שמור את הפרומפט.</p>';
+    }
+
+    // Neural canvas
+    const canvas = document.getElementById('neuralCanvas');
+    const ctx = canvas.getContext('2d');
+    function resize() { canvas.width = canvas.parentElement.offsetWidth; canvas.height = canvas.parentElement.offsetHeight; }
+    resize(); window.addEventListener('resize', resize);
+    function makeNodes() { return Array.from({length:60}, () => ({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-0.5)*0.5,vy:(Math.random()-0.5)*0.5,r:Math.random()*1.8+0.8})); }
+    let nodes = makeNodes();
+    window.addEventListener('resize', () => { nodes = makeNodes(); });
+    function loop() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      for (let i=0;i<nodes.length;i++) for (let j=i+1;j<nodes.length;j++) {
+        const dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y, d=Math.sqrt(dx*dx+dy*dy);
+        if (d<130) { ctx.strokeStyle=`rgba(216,180,254,${(1-d/130)*0.35})`; ctx.lineWidth=0.6; ctx.beginPath(); ctx.moveTo(nodes[i].x,nodes[i].y); ctx.lineTo(nodes[j].x,nodes[j].y); ctx.stroke(); }
+      }
+      nodes.forEach(n => {
+        const grd = ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r*3);
+        grd.addColorStop(0,`rgba(216,180,254,0.9)`); grd.addColorStop(1,`rgba(216,180,254,0)`);
+        ctx.beginPath(); ctx.arc(n.x,n.y,n.r*3,0,Math.PI*2); ctx.fillStyle=grd; ctx.fill();
+        ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2); ctx.fillStyle=`rgb(216,180,254)`; ctx.fill();
+        n.x += n.vx; n.y += n.vy;
+        if (n.x<0||n.x>canvas.width) n.vx*=-1; if (n.y<0||n.y>canvas.height) n.vy*=-1;
+      });
+      requestAnimationFrame(loop);
+    }
+    loop();
+  </script>
+</body>
+</html>

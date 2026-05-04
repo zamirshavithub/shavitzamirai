@@ -450,6 +450,15 @@
       .opt-in-form { flex-direction: column; }
       footer { padding: 24px 20px; }
     }
+  
+    .opt-in-form { flex-direction: column; }
+    .opt-in-form .row { display: flex; gap: 10px; width: 100%; }
+    .opt-in-form .row > * { flex: 1; }
+    .opt-in-form input { width: 100%; }
+    @media (max-width: 600px) {
+      .opt-in-form .row { flex-direction: column; }
+    }
+
   </style>
 </head>
 <body>
@@ -734,6 +743,11 @@ Code:
         <input type="hidden" name="_next" value="https://shavitzamirai.com/secure-prompt/?subscribed=true" />
         <input type="hidden" name="source" value="secure-prompt-page" />
         <input type="email" name="email" placeholder="האימייל שלך" required />
+        <div class="row">
+          <input type="text" name="name" placeholder="שם (אופציונלי)" />
+          <input type="tel" name="phone" placeholder="טלפון (אופציונלי)" />
+        </div>
+        <input type="text" name="business_or_role" placeholder="שם עסק או תפקיד (אופציונלי)" />
         <button type="submit">אני בפנים</button>
       </form>
       <p class="privacy">לא משתפים את האימייל. לעולם.</p>

@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>איך להפוך את קלוד לעובד הכי טוב שלך — הסדרה המלאה | שביט זמיר</title>
+  <meta name="description" content="הסדרה השלמה — כל הפרקים על איך להפוך את קלוד לעובד הכי טוב שלך. מתפקיד ראשון ועד אגנטים שעובדים בלילה." />
+  <meta property="og:title" content="הסדרה: איך להפוך את קלוד לעובד הכי טוב שלך" />
+  <meta property="og:description" content="29 פרקים. מהבסיס ועד למערכות אגנטים מתקדמות. הכל בעברית." />
+  <meta property="og:type" content="website" />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Heebo', sans-serif; background: #f5f5f5; color: #1a1a1a; direction: rtl; line-height: 1.6; }
+
+    nav { background: #0b1a2e; padding: 18px 60px; display: flex; justify-content: space-between; align-items: center; }
+    nav .logo { color: #fff; font-size: 18px; font-weight: 700; text-decoration: none; }
+    nav ul { list-style: none; display: flex; gap: 32px; }
+    nav ul li a { color: #ccd6f6; text-decoration: none; font-size: 15px; font-weight: 400; transition: color 0.2s; }
+    nav ul li a:hover { color: #fff; }
+
+    .hero {
+      background: linear-gradient(135deg, #0b1a2e 0%, #112240 60%, #1a3a6e 100%);
+      padding: 90px 60px 100px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    #neuralCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+    .hero > * { position: relative; z-index: 1; }
+    .hero .badge {
+      display: inline-block;
+      background: rgba(29,111,245,0.15);
+      border: 1px solid rgba(29,111,245,0.4);
+      color: #63b3ff;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      font-size: 56px;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.15;
+      margin-bottom: 22px;
+      max-width: 880px;
+      margin-inline: auto;
+    }
+    .hero .lede {
+      font-size: 18px;
+      color: #a8c0e0;
+      line-height: 1.75;
+      max-width: 700px;
+      margin: 0 auto 36px;
+    }
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      flex-wrap: wrap;
+      margin-bottom: 40px;
+    }
+    .hero-stats .stat { text-align: center; }
+    .hero-stats .stat .num { display: block; font-size: 36px; font-weight: 800; color: #fff; line-height: 1; }
+    .hero-stats .stat .lbl { display: block; font-size: 13px; color: #6a8caf; margin-top: 6px; letter-spacing: 0.5px; }
+    .hero-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { background: #1d6ff5; color: #fff; border: none; padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; font-family: 'Heebo', sans-serif; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
+    .btn-primary:hover { background: #1558d0; transform: translateY(-1px); }
+    .btn-outline { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.3); padding: 12px 30px; border-radius: 8px; font-size: 16px; font-weight: 600; font-family: 'Heebo', sans-serif; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
+    .btn-outline:hover { border-color: #fff; }
+
+    section { padding: 80px 60px; }
+    .section-head { max-width: 760px; margin: 0 auto 56px; text-align: center; }
+    .section-head h2 { font-size: 36px; font-weight: 800; color: #0b1a2e; margin-bottom: 16px; }
+    .section-head p { font-size: 17px; color: #555; line-height: 1.75; }
+
+    .why { background: #fff; }
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+    .why-card {
+      background: #f5f7fb;
+      border: 1px solid #e6ecf5;
+      border-radius: 14px;
+      padding: 32px 26px;
+    }
+    .why-card .icon {
+      display: inline-block;
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: #1d6ff5;
+      color: #fff;
+      text-align: center;
+      line-height: 48px;
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+    .why-card h3 { font-size: 19px; font-weight: 700; color: #0b1a2e; margin-bottom: 10px; }
+    .why-card p { font-size: 15px; color: #555; line-height: 1.7; }
+
+    .episodes {
+      background: #f5f7fb;
+    }
+    .episodes-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .episode {
+      background: #fff;
+      border: 1px solid #e6ecf5;
+      border-radius: 14px;
+      padding: 26px 28px;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .episode:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(11,26,46,0.08);
+      border-color: #1d6ff5;
+    }
+    .episode-num {
+      display: inline-block;
+      background: #0b1a2e;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+      align-self: flex-start;
+    }
+    .episode h3 {
+      font-size: 19px;
+      font-weight: 700;
+      color: #0b1a2e;
+      line-height: 1.35;
+    }
+    .episode .hook {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.7;
+      flex: 1;
+    }
+    .episode .links {
+      display: flex;
+      gap: 8px;
+      margin-top: 6px;
+      padding-top: 12px;
+      border-top: 1px solid #f0f3f8;
+      flex-wrap: wrap;
+    }
+    .episode .links a {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1d6ff5;
+      text-decoration: none;
+    }
+    .episode .links a:hover { text-decoration: underline; }
+    .episode .links .sep { color: #c0c8d6; }
+    .play-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #1d6ff5;
+      color: #fff !important;
+      padding: 7px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      font-family: 'Heebo', sans-serif;
+      transition: background 0.15s;
+    }
+    .play-btn:hover { background: #1558d0; text-decoration: none !important; }
+    .play-btn .triangle {
+      display: inline-block;
+      width: 0; height: 0;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-right: 7px solid #fff;
+    }
+    .external-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 7px 10px;
+      font-size: 13px;
+      color: #5a6b85 !important;
+      font-weight: 500;
+    }
+    .external-link:hover { color: #1d6ff5 !important; }
+
+    /* Lightbox modal for video playback */
+    .video-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(11, 26, 46, 0.92);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+      backdrop-filter: blur(6px);
+    }
+    .video-modal.open { display: flex; }
+    .video-modal-content {
+      position: relative;
+      width: 100%;
+      max-width: 380px;
+      aspect-ratio: 9 / 16;
+      max-height: 90vh;
+      background: #000;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+    }
+    .video-modal-content iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+    .video-modal-close {
+      position: absolute;
+      top: -44px;
+      left: 0;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 20px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s;
+    }
+    .video-modal-close:hover { background: rgba(255,255,255,0.22); }
+    .video-modal-caption {
+      position: absolute;
+      top: -38px;
+      right: 0;
+      color: #a8c0e0;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .episode.placeholder {
+      background: #f5f7fb;
+      border: 1px dashed #c7d2e0;
+      opacity: 0.65;
+    }
+    .episode.placeholder:hover { transform: none; box-shadow: none; border-color: #c7d2e0; }
+    .episode.placeholder .episode-num { background: #888; }
+
+    .episodes-note {
+      max-width: 760px;
+      margin: 36px auto 0;
+      background: #fff;
+      border: 1px solid #e6ecf5;
+      border-right: 4px solid #1d6ff5;
+      border-radius: 10px;
+      padding: 20px 24px;
+      font-size: 15px;
+      color: #555;
+      line-height: 1.7;
+    }
+    .episodes-note strong { color: #0b1a2e; }
+
+    .follow {
+      background: linear-gradient(135deg, #0b1a2e 0%, #1a3a6e 100%);
+      color: #fff;
+      text-align: center;
+    }
+    .follow h2 { color: #fff; font-size: 32px; font-weight: 800; margin-bottom: 14px; }
+    .follow p { color: #a8c0e0; font-size: 16px; margin-bottom: 28px; }
+    .follow .social-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .social-btn-large {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: 'Heebo', sans-serif;
+      text-decoration: none;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .social-btn-large:hover {
+      background: rgba(255,255,255,0.15);
+      transform: translateY(-2px);
+    }
+
+    .opt-in { background: #fff; padding-bottom: 90px; }
+    .opt-in-card {
+      max-width: 620px;
+      margin: 0 auto;
+      background: #f5f7fb;
+      border: 1px solid #e6ecf5;
+      border-radius: 16px;
+      padding: 40px 36px;
+      text-align: center;
+    }
+    .opt-in-card h3 { font-size: 24px; font-weight: 800; color: #0b1a2e; margin-bottom: 12px; }
+    .opt-in-card p { font-size: 15px; color: #555; line-height: 1.7; margin-bottom: 22px; }
+    .opt-in-form { display: flex; gap: 10px; max-width: 440px; margin: 0 auto; }
+    .opt-in-form input {
+      flex: 1; padding: 12px 16px; border-radius: 8px;
+      border: 1.5px solid #d0d8e6; background: #fff;
+      font-size: 15px; font-family: 'Heebo', sans-serif;
+      direction: rtl; outline: none; transition: border-color 0.2s;
+    }
+    .opt-in-form input:focus { border-color: #1d6ff5; }
+    .opt-in-form button {
+      background: #1d6ff5; color: #fff; border: none;
+      padding: 12px 24px; border-radius: 8px;
+      font-size: 15px; font-weight: 600;
+      font-family: 'Heebo', sans-serif; cursor: pointer;
+    }
+    .opt-in-form button:hover { background: #1558d0; }
+    .opt-in-card .privacy { font-size: 12px; color: #888; margin-top: 14px; }
+
+    footer {
+      background: #0b1a2e;
+      padding: 28px 60px;
+      text-align: center;
+      color: #6a8caf;
+      font-size: 14px;
+    }
+    footer a { color: #6a8caf; text-decoration: none; }
+    footer a:hover { color: #fff; }
+
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      nav ul { gap: 14px; }
+      .hero { padding: 60px 20px 70px; }
+      .hero h1 { font-size: 32px; }
+      .hero .lede { font-size: 15px; }
+      .hero-stats { gap: 28px; }
+      .hero-stats .stat .num { font-size: 28px; }
+      section { padding: 50px 20px; }
+      .section-head h2 { font-size: 26px; }
+      .why-grid, .episodes-grid { grid-template-columns: 1fr; }
+      .opt-in-form { flex-direction: column; }
+      footer { padding: 24px 20px; }
+    }
+  
+    .opt-in-form { flex-direction: column; }
+    .opt-in-form .row { display: flex; gap: 10px; width: 100%; }
+    .opt-in-form .row > * { flex: 1; }
+    .opt-in-form input { width: 100%; }
+    @media (max-width: 600px) {
+      .opt-in-form .row { flex-direction: column; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/" class="logo">שביט זמיר</a>
+    <ul>
+      <li><a href="/#about">מי אני</a></li>
+      <li><a href="/#services">שירותים</a></li>
+      <li><a href="/#free">תכנים חינמיים</a></li>
+      <li><a href="/#contact">צור קשר</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <canvas id="neuralCanvas"></canvas>
+    <span class="badge">סדרה · 29 פרקים</span>
+    <h1>איך להפוך את קלוד<br/>לעובד הכי טוב שלך</h1>
+    <p class="lede">
+      הסדרה המלאה — מהבסיס ("תן לקלוד תפקיד") ועד מערכות אגנטים שעובדים לבד בלילה. כל פרק הוא 60 שניות, אבל כל פרק נותן יכולת אחת חדשה. צופים מההתחלה — הופכים את קלוד מצ'אטבוט לעובד שעושה חצי מהעבודה.
+    </p>
+    <div class="hero-stats">
+      <div class="stat"><span class="num">29</span><span class="lbl">פרקים</span></div>
+      <div class="stat"><span class="num">60s</span><span class="lbl">לפרק</span></div>
+      <div class="stat"><span class="num">∞</span><span class="lbl">יכולות חדשות</span></div>
+    </div>
+    <div class="hero-buttons">
+      <a href="#episodes" class="btn-primary">פרקי הסדרה ↓</a>
+      <a href="https://www.instagram.com/shavitzamirai" target="_blank" class="btn-outline">עקבו באינסטגרם</a>
+    </div>
+  </section>
+
+  <section class="why">
+    <div class="section-head">
+      <h2>למה הסדרה הזאת עובדת</h2>
+      <p>רוב התוכן על קלוד מלמד "פרומפט אחד מגניב". הסדרה הזאת בונה משהו אחר.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="icon">1</div>
+        <h3>מטאפורת "עובד" שעושה הכל</h3>
+        <p>אגנט = עובד. פרומפט = הוראות עבודה. MCP = הרשאות. זה מנגיש את הז'רגון בלי לרדד.</p>
+      </div>
+      <div class="why-card">
+        <div class="icon">2</div>
+        <h3>קשת אמיתית, לא טיפים מנותקים</h3>
+        <p>ראיון → אונבורדינג → משימה ראשונה → צוות → קידום. הצופה חוזר כי הוא רוצה לראות את "העובד" מתפתח.</p>
+      </div>
+      <div class="why-card">
+        <div class="icon">3</div>
+        <h3>כל פרק נותן יכולת שיש לי בעצמי</h3>
+        <p>לא תיאוריה. כל מה שמופיע פה רץ אצלי בפועל. הצופה לוקח, מיישם, ורואה תוצאה.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="episodes" id="episodes">
+    <div class="section-head">
+      <h2>כל הפרקים</h2>
+      <p>הסדר המומלץ לצפייה: מ-1 עד 29. כל פרק עומד בפני עצמו, אבל הקשת מתחברת.</p>
+    </div>
+    <div class="episodes-grid">
+
+      <div class="episode">
+        <span class="episode-num">פרק 1</span>
+        <h3>תן לקלוד תפקיד</h3>
+        <p class="hook">רוב האנשים מפסידים 80% מהיכולת של קלוד כי אף אחד לא לימד אותם איך לדבר איתו נכון. טעות אחת קטנה היא ההבדל בין תשובה גנרית לתוצאה שמוכנה לשימוש.</p>
+        <div class="links"><button class="play-btn" data-video-id="7618565429748976916" data-label="פרק 1"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7618565429748976916" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 2</span>
+        <h3>קלוד זה לא עוד ChatGPT</h3>
+        <p class="hook">קלוד הוא לא עוד צ'אט-בוט — הוא כותב מסמכים שלמים, קורא את הקבצים שלך ועובד כמו עובד אמיתי. שלושה הבדלים שישנו לכם את הוורקפלו.</p>
+        <div class="links"><button class="play-btn" data-video-id="7618910896873590036" data-label="פרק 2"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7618910896873590036" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 3</span>
+        <h3>להעביר את כל המידע מ-ChatGPT לקלוד</h3>
+        <p class="hook">איך לקחת שיחות, מסמכים ותובנות שצברתם ב-ChatGPT — ולהפוך אותם לבסיס עבודה חכם שקלוד יודע להשתמש בו, כדי שיפסיק לנחש ויתחיל לעבוד כמו מישהו שמכיר את העסק שלכם.</p>
+        <div class="links"><button class="play-btn" data-video-id="7618998253194956052" data-label="פרק 3"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7618998253194956052" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 4</span>
+        <h3>פרויקטים בקלוד — הפיצ'ר שמשנה הכל</h3>
+        <p class="hook">פיצ'ר אחד שהופך את קלוד מצ'אטבוט שמתחיל מאפס לעובד שמכיר אתכם ואת העסק. שלושה צעדים ואתם מסודרים.</p>
+        <div class="links"><button class="play-btn" data-video-id="7619359869866642708" data-label="פרק 4"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7619359869866642708" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 5</span>
+        <h3>Chief of Staff — הפרומפט שכולם מדברים עליו</h3>
+        <p class="hook">פרומפט אחד שהופך את קלוד למנהל משימות שעובד בשבילכם כל יום — כותב מיילים, מכין הצעות מחיר, ומסדר לכם את היום.</p>
+        <div class="links"><button class="play-btn" data-video-id="7620020380790459668" data-label="פרק 5"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7620020380790459668" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 6</span>
+        <h3>3 הוראות שאתם חייבים לזכור</h3>
+        <p class="hook">שלוש הוראות שאתם צריכים לזכור לבקש מקלוד בכל שיחה — והפלט קופץ ברמה.</p>
+        <div class="links"><button class="play-btn" data-video-id="7621180927435099412" data-label="פרק 6"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7621180927435099412" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 7</span>
+        <h3>MCP — תנו לקלוד גישה לכלים שלכם</h3>
+        <p class="hook">עד עכשיו קלוד עבד רק עם מה שהכנסתם לו. עכשיו הוא יכול לגשת בעצמו לכלים שלכם — מה שמשנה את כל המשחק.</p>
+        <div class="links"><button class="play-btn" data-video-id="7621570288655846677" data-label="פרק 7"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7621570288655846677" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 8</span>
+        <h3>חיבור Gmail MCP חי</h3>
+        <p class="hook">5 צעדים לחבר Gmail לקלוד — ואז קלוד קורא לכם את המיילים לבד.</p>
+        <div class="links"><button class="play-btn" data-video-id="7621908263839223060" data-label="פרק 8"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7621908263839223060" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 9</span>
+        <h3>אוטומציה — קלוד עובד כל יום בלעדיכם</h3>
+        <p class="hook">יש משימות שאתם עושים כל יום ידנית. הסרטון הזה מראה איך מעבירים אותן לקלוד פעם אחת — והוא ממשיך לבד.</p>
+        <div class="links"><button class="play-btn" data-video-id="7622325530829851924" data-label="פרק 9"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7622325530829851924" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 10</span>
+        <h3>להפסיק להשתמש בקלוד כמו גוגל</h3>
+        <p class="hook">רוב האנשים משתמשים ב-Claude AI כמו גוגל יקר — שואלים שאלה ומקבלים תשובה. ככה הופכים אותו לעובד.</p>
+        <div class="links"><button class="play-btn" data-video-id="7622656223254416661" data-label="פרק 10"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7622656223254416661" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 11</span>
+        <h3>וויב קודינג — אפליקציה ב-5 דקות בלי קוד</h3>
+        <p class="hook">בניתי כלי ניהול לקוחות ב-5 דקות. בלי שורת קוד אחת. ככה תעשו אותו דבר.</p>
+        <div class="links"><button class="play-btn" data-video-id="7623057669271719189" data-label="פרק 11"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7623057669271719189" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 12</span>
+        <h3>קלוד מרחוק — שלוט מהטלפון</h3>
+        <p class="hook">שלחתי הוראה לקלוד מהטלפון בזמן פגישה. חזרתי הביתה לעבודה גמורה.</p>
+        <div class="links"><button class="play-btn" data-video-id="7623448535710698773" data-label="פרק 12"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7623448535710698773" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 13</span>
+        <h3>פרומפטינג הפוך — בקש מקלוד את ההוראות</h3>
+        <p class="hook">הסוד הכי גדול לכתיבת הוראות טובות לקלוד — לא לכתוב אותן בכלל. תן לו דוגמה והוא יכתוב לעצמו.</p>
+        <div class="links"><button class="play-btn" data-video-id="7624202357408091413" data-label="פרק 13"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7624202357408091413" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 14</span>
+        <h3>Auto Mode — קלוד פועל לבד עם הגנה</h3>
+        <p class="hook">רוב האנשים משתמשים בקלוד בצורה ידנית. שואלים, מקבלים, שואלים שוב. עם Auto Mode הוא רץ לבד.</p>
+        <div class="links"><button class="play-btn" data-video-id="7624941817464655125" data-label="פרק 14"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7624941817464655125" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 15</span>
+        <h3>5 דברים שלא ידעתם שקלוד עושה</h3>
+        <p class="hook">חמישה דברים שקלוד עושה שרוב האנשים לא יודעים שאפשר. כל אחד מהם משנה לכם את הוורקפלו.</p>
+        <div class="links"><button class="play-btn" data-video-id="7625265193961966868" data-label="פרק 15"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7625265193961966868" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 16</span>
+        <h3>Prompt Chaining — שרשרת משימות</h3>
+        <p class="hook">רוב האנשים שולחים פרומפט אחד לקלוד ומצפים לקסם. המתקדמים שולחים שרשרת — והפלט שונה לחלוטין.</p>
+        <div class="links"><button class="play-btn" data-video-id="7626380491058564372" data-label="פרק 16"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7626380491058564372" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 17</span>
+        <h3>Remotion — URL הופך לסרטון פרסומת</h3>
+        <p class="hook">Remotion — הכלי שמשנה את כללי המשחק ביצירת סרטונים עם AI. נתתי לקלוד כתובת אתר. קיבלתי סרטון מוגמר.</p>
+        <div class="links"><button class="play-btn" data-video-id="7626783214765362453" data-label="פרק 17"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7626783214765362453" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 18</span>
+        <h3>Insights — דוח על השימוש שלך בקלוד</h3>
+        <p class="hook">איך להשתמש בפקודת Insights בקלוד כדי לקבל דוח מפורט על השימוש שלכם — ומה היא חושפת על הוורקפלו.</p>
+        <div class="links"><button class="play-btn" data-video-id="7627148689810951445" data-label="פרק 18"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7627148689810951445" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 19</span>
+        <h3>כשקלוד קוד מתחיל לרוץ — ועושה נזק</h3>
+        <p class="hook">הבעיה שקלוד קוד מתחיל לרוץ על משימה בלי להבין אותה נכון, וכתוצאה מכך משנה קבצים ומוחק דברים בכיוון הלא נכון. ככה מונעים את זה.</p>
+        <div class="links"><button class="play-btn" data-video-id="7628178881140395285" data-label="פרק 19"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7628178881140395285" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 20</span>
+        <h3>Computer Use — קלוד רואה ומשתמש במחשב</h3>
+        <p class="hook">הפיצ'ר החדש של קלוד — Computer Use — מאפשר לו לראות את המסך שלך ולתפעל תוכנות כמו בן אדם רגיל.</p>
+        <div class="links"><button class="play-btn" data-video-id="7628999240089472276" data-label="פרק 20"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7628999240089472276" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 21</span>
+        <h3>מנוע חיפוש מתקדם או אייג'נט עובד?</h3>
+        <p class="hook">ההבדל הענק בין שימוש בקלוד כמנוע חיפוש מתקדם לבין שימוש בו כאייג'נט עובד. אנשים מפספסים את ההבדל הזה.</p>
+        <div class="links"><button class="play-btn" data-video-id="7629304649668988180" data-label="פרק 21"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7629304649668988180" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 22</span>
+        <h3>Claude for Word — תוסף הוורד החדש</h3>
+        <p class="hook">Claude for Word, התוסף החדש של Anthropic שזה עתה שוחרר בגרסת בטא. ככה הוא משנה את העבודה במסמכים.</p>
+        <div class="links"><button class="play-btn" data-video-id="7629755889330752789" data-label="פרק 22"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7629755889330752789" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 23</span>
+        <h3>Routines — אוטומציה ב-Claude Code</h3>
+        <p class="hook">Routines — פיצ'ר חדש ב-Claude Code שמאפשר להריץ קוד אוטומטית בקלאוד של Anthropic ללא צורך בשרת או cron job.</p>
+        <div class="links"><button class="play-btn" data-video-id="7630169864920976660" data-label="פרק 23"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7630169864920976660" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 24</span>
+        <h3>Skills — איך מלמדים את קלוד מיומנות</h3>
+        <p class="hook">Skill זה ידע. ככה אתם מלמדים את קלוד מיומנות חדשה פעם אחת — והוא מפעיל אותה לבד בכל פעם שצריך.</p>
+        <div class="links"><button class="play-btn" data-video-id="7630471301819567381" data-label="פרק 24"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7630471301819567381" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 25</span>
+        <h3>קלוד דיזיין — ה-Figma Killer של Anthropic</h3>
+        <p class="hook">Anthropic השיקו לפני כמה ימים כלי שהורג את Figma — ואתם לא חייבים להיות מעצבים כדי להשתמש בו. כותבים משפט, מקבלים פרוטוטייפ אינטראקטיבי.</p>
+        <div class="links"><button class="play-btn" data-video-id="7630839129965726996" data-label="פרק 25"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7630839129965726996" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 26</span>
+        <h3>5 פלאגאינים מאומתים שכדאי להתקין</h3>
+        <p class="hook">5 פלאגאינים מאומתים של Anthropic שהתקנו ב-Claude והפכו את הצוות שלנו מאדם אחד לחמישה אנשים.</p>
+        <div class="links"><button class="play-btn" data-video-id="7631590717101509908" data-label="פרק 26"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7631590717101509908" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 27</span>
+        <h3>Dispatch מול Remote Control — וההבדל הקריטי</h3>
+        <p class="hook">שלחתי לקלוד הודעה מהאוטובוס. כשהגעתי הביתה — הסרטון הזה כבר היה מוכן. ההבדל בין Dispatch ל-Remote Control, ואזהרת אבטחה שאף אחד לא נותן.</p>
+        <div class="links"><button class="play-btn" data-video-id="7632772232133004565" data-label="פרק 27"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7632772232133004565" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 28</span>
+        <h3>דאשבורד שמתעדכן לבד — ארטיפקט בסיידבר</h3>
+        <p class="hook">הפסקתי לבקש מקלוד דוחות שבועיים — בניתי דאשבורד שמתעדכן לבד. ארטיפקט אחד יושב בסיידבר ושואב דאטה טריה בכל פתיחה.</p>
+        <div class="links"><button class="play-btn" data-video-id="7633000057536646420" data-label="פרק 28"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7633000057536646420" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">פרק 29</span>
+        <h3>פרק 29 בסדרה</h3>
+        <p class="hook">פרק נוסף בסדרה — צפה בטיקטוק לפרטים המלאים.</p>
+        <div class="links"><button class="play-btn" data-video-id="7635286710175206677" data-label="פרק 29"><span class="triangle"></span> נגן את הסרטון</button><a href="https://www.tiktok.com/@shavitzamir/video/7635286710175206677" target="_blank" rel="noopener" class="external-link">פתח בטיקטוק ↗</a></div>
+      </div>
+
+    </div>
+
+    <div class="episodes-note">
+      <strong>הערת המייסד:</strong> הסדרה ממשיכה — כל שבוע פרק חדש. עמוד זה מתעדכן ידנית, אז אם אתה מחפש פרק שעדיין לא מופיע פה, גש ישירות לפרופיל באינסטגרם או טיקטוק. כל הפרקים נשמרים שם בסדר עולה.
+    </div>
+  </section>
+
+  <section class="follow">
+    <h2>אל תפספס את הפרק הבא</h2>
+    <p>הסדרה ממשיכה. עוקב באינסטגרם או טיקטוק = פרק חדש בכל שבוע ישר אליך.</p>
+    <div class="social-buttons">
+      <a href="https://www.instagram.com/shavitzamirai" target="_blank" class="social-btn-large">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
+        Instagram
+      </a>
+      <a href="https://www.tiktok.com/@shavitzamir" target="_blank" class="social-btn-large">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+        TikTok
+      </a>
+    </div>
+  </section>
+
+  <section class="opt-in">
+    <div class="opt-in-card">
+      <h3>רוצים סיכום שבועי של הסדרה?</h3>
+      <p>אני שולח אחת לשבוע — הפרק החדש + תבנית/פרומפט מהסדרה. אפשר להתנתק בכל זמן.</p>
+      <form class="opt-in-form" action="https://formsubmit.co/zamir.shavit@gmail.com" method="POST">
+        <input type="hidden" name="_subject" value="הרשמה - סדרת העובד מקלוד" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_next" value="https://shavitzamirai.com/best-employee-series/?subscribed=true" />
+        <input type="hidden" name="source" value="best-employee-series-page" />
+        <input type="email" name="email" placeholder="האימייל שלך" required />
+        <div class="row">
+          <input type="text" name="name" placeholder="שם (אופציונלי)" />
+          <input type="tel" name="phone" placeholder="טלפון (אופציונלי)" />
+        </div>
+        <input type="text" name="business_or_role" placeholder="שם עסק או תפקיד (אופציונלי)" />
+        <button type="submit">אני בפנים</button>
+      </form>
+      <p class="privacy">לא משתפים את האימייל. לעולם.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 שביט זמיר · <a href="/">הביתה</a> · <a href="/30-reels/">30 רילז ב-4 שעות</a> · <a href="/secure-prompt/">הפרומפט המאובטח</a> · <a href="mailto:zamir.shavit@gmail.com">zamir.shavit@gmail.com</a></p>
+  </footer>
+
+  <!-- Video lightbox -->
+  <div class="video-modal" id="videoModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="video-modal-content">
+      <span class="video-modal-caption" id="videoModalCaption"></span>
+      <button class="video-modal-close" id="videoModalClose" aria-label="סגור">×</button>
+      <iframe id="videoModalFrame" src="" allow="autoplay; fullscreen" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <script>
+    // Video lightbox playback
+    (function() {
+      const modal = document.getElementById('videoModal');
+      const frame = document.getElementById('videoModalFrame');
+      const caption = document.getElementById('videoModalCaption');
+      const closeBtn = document.getElementById('videoModalClose');
+
+      function openVideo(videoId, label) {
+        frame.src = 'https://www.tiktok.com/embed/v2/' + videoId + '?lang=he-IL&autoplay=1';
+        caption.textContent = label || '';
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeVideo() {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        frame.src = '';
+        document.body.style.overflow = '';
+      }
+
+      document.querySelectorAll('.play-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault();
+          openVideo(btn.dataset.videoId, btn.dataset.label || '');
+        });
+      });
+      closeBtn.addEventListener('click', closeVideo);
+      modal.addEventListener('click', e => { if (e.target === modal) closeVideo(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('open')) closeVideo(); });
+    })();
+
+    if (new URLSearchParams(window.location.search).get('subscribed') === 'true') {
+      const card = document.querySelector('.opt-in-card');
+      if (card) card.innerHTML = '<h3 style="color:#22c55e;">✓ נרשמת בהצלחה</h3><p>הסיכום הראשון יגיע בעוד מקסימום שבוע. בינתיים — עקבו באינסטגרם או טיקטוק כדי לראות את הפרקים אונליין.</p>';
+    }
+
+    const canvas = document.getElementById('neuralCanvas');
+    const ctx = canvas.getContext('2d');
+    function resize() { canvas.width = canvas.parentElement.offsetWidth; canvas.height = canvas.parentElement.offsetHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+    function makeNodes() { return Array.from({length:60}, () => ({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-0.5)*0.5,vy:(Math.random()-0.5)*0.5,r:Math.random()*1.8+0.8})); }
+    let nodes = makeNodes();
+    window.addEventListener('resize', () => { nodes = makeNodes(); });
+    function loop() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      for (let i=0;i<nodes.length;i++) for (let j=i+1;j<nodes.length;j++) {
+        const dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y, d=Math.sqrt(dx*dx+dy*dy);
+        if (d<130) { ctx.strokeStyle=`rgba(99,179,255,${(1-d/130)*0.35})`; ctx.lineWidth=0.6; ctx.beginPath(); ctx.moveTo(nodes[i].x,nodes[i].y); ctx.lineTo(nodes[j].x,nodes[j].y); ctx.stroke(); }
+      }
+      nodes.forEach(n => {
+        const grd = ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r*3);
+        grd.addColorStop(0,'rgba(99,179,255,0.9)'); grd.addColorStop(1,'rgba(29,111,245,0)');
+        ctx.beginPath(); ctx.arc(n.x,n.y,n.r*3,0,Math.PI*2); ctx.fillStyle=grd; ctx.fill();
+        ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2); ctx.fillStyle='#63b3ff'; ctx.fill();
+        n.x += n.vx; n.y += n.vy;
+        if (n.x<0||n.x>canvas.width) n.vx*=-1; if (n.y<0||n.y>canvas.height) n.vy*=-1;
+      });
+      requestAnimationFrame(loop);
+    }
+    loop();
+  </script>
+</body>
+</html>

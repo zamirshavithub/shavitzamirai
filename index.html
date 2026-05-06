@@ -32,6 +32,7 @@
       list-style: none;
       display: flex;
       gap: 32px;
+      align-items: center;
     }
     nav ul li a {
       color: #ccd6f6;
@@ -41,6 +42,21 @@
       transition: color 0.2s;
     }
     nav ul li a:hover { color: #fff; }
+    .lang-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: #fff !important;
+      font-weight: 700 !important;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 13px !important;
+      letter-spacing: 0.5px;
+      transition: background 0.2s;
+    }
+    .lang-toggle:hover { background: rgba(255,255,255,0.18); color: #fff !important; }
 
     /* ─── HERO ─── */
     .hero {
@@ -518,6 +534,7 @@
       <li><a href="#series">סדרות</a></li>
       <li><a href="#free">תכנים חינמיים</a></li>
       <li><a href="#contact">צור קשר</a></li>
+      <li><a href="/en/" class="lang-toggle" title="English">🇬🇧 EN</a></li>
     </ul>
   </nav>
 

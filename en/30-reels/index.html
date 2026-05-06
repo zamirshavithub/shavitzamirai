@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>30 Reels in 4 Hours — The Template | Shavit Zamir</title>
+  <meta name="description" content="The full template for planning a month of short-form content in one 4-hour session. Claude project setup, idea generator, critic, and full script writer prompts. Free." />
+  <meta property="og:title" content="30 Reels in 4 Hours — The Full Template" />
+  <meta property="og:description" content="Claude project setup + 3 prompts I use to write a month of content in a single session." />
+  <meta property="og:type" content="website" />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Heebo', sans-serif; background: #f5f5f5; color: #1a1a1a; direction: ltr; line-height: 1.6; }
+
+    nav { background: #0b1a2e; padding: 18px 60px; display: flex; justify-content: space-between; align-items: center; }
+    nav .logo { color: #fff; font-size: 18px; font-weight: 700; text-decoration: none; }
+    nav ul { list-style: none; display: flex; gap: 32px; align-items: center; }
+    nav ul li a { color: #ccd6f6; text-decoration: none; font-size: 15px; font-weight: 400; transition: color 0.2s; }
+    nav ul li a:hover { color: #fff; }
+    .lang-toggle { display: inline-flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #fff !important; font-weight: 700 !important; padding: 5px 12px; border-radius: 6px; font-size: 13px !important; letter-spacing: 0.5px; transition: background 0.2s; }
+    .lang-toggle:hover { background: rgba(255,255,255,0.18); color: #fff !important; }
+
+    .hero { background: linear-gradient(135deg, #0b1a2e 0%, #112240 60%, #1a3a6e 100%); padding: 90px 60px 100px; text-align: center; position: relative; overflow: hidden; }
+    #neuralCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+    .hero > * { position: relative; z-index: 1; }
+    .hero .badge { display: inline-block; background: rgba(29,111,245,0.15); border: 1px solid rgba(29,111,245,0.4); color: #63b3ff; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; margin-bottom: 24px; }
+    .hero h1 { font-size: 56px; font-weight: 800; color: #fff; line-height: 1.15; margin-bottom: 22px; max-width: 860px; margin-inline: auto; }
+    .hero .lede { font-size: 18px; color: #a8c0e0; line-height: 1.75; max-width: 720px; margin: 0 auto 36px; font-weight: 400; }
+    .hero-stats { display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; margin-bottom: 40px; }
+    .hero-stats .stat { text-align: center; }
+    .hero-stats .stat .num { display: block; font-size: 36px; font-weight: 800; color: #fff; line-height: 1; }
+    .hero-stats .stat .lbl { display: block; font-size: 13px; color: #6a8caf; margin-top: 6px; letter-spacing: 0.5px; }
+    .hero-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { background: #1d6ff5; color: #fff; border: none; padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; font-family: 'Heebo', sans-serif; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
+    .btn-primary:hover { background: #1558d0; transform: translateY(-1px); }
+    .btn-outline { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.3); padding: 12px 30px; border-radius: 8px; font-size: 16px; font-weight: 600; font-family: 'Heebo', sans-serif; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
+    .btn-outline:hover { border-color: #fff; }
+
+    section { padding: 80px 60px; }
+    .section-head { max-width: 720px; margin: 0 auto 56px; text-align: center; }
+    .section-head h2 { font-size: 36px; font-weight: 800; color: #0b1a2e; margin-bottom: 16px; }
+    .section-head p { font-size: 17px; color: #555; line-height: 1.75; }
+
+    .whats-inside { background: #fff; }
+    .inside-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; max-width: 1080px; margin: 0 auto; }
+    .inside-card { background: #f5f7fb; border-radius: 14px; padding: 28px 22px; border: 1px solid #e6ecf5; transition: all 0.2s; }
+    .inside-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(11,26,46,0.08); }
+    .inside-card .num { display: inline-block; background: #1d6ff5; color: #fff; width: 32px; height: 32px; border-radius: 50%; text-align: center; line-height: 32px; font-weight: 700; font-size: 14px; margin-bottom: 14px; }
+    .inside-card h3 { font-size: 17px; font-weight: 700; color: #0b1a2e; margin-bottom: 10px; }
+    .inside-card p { font-size: 14px; color: #555; line-height: 1.65; }
+
+    .how-use { background: #f5f7fb; }
+    .how-use-content { max-width: 760px; margin: 0 auto; }
+    .how-use ol { counter-reset: step; list-style: none; padding: 0; }
+    .how-use ol li { counter-increment: step; position: relative; padding: 18px 24px 18px 70px; background: #fff; border-radius: 12px; margin-bottom: 12px; border: 1px solid #e6ecf5; font-size: 16px; color: #1a1a1a; line-height: 1.7; }
+    .how-use ol li::before { content: counter(step); position: absolute; left: 18px; top: 18px; background: #1d6ff5; color: #fff; width: 32px; height: 32px; border-radius: 50%; text-align: center; line-height: 32px; font-weight: 700; font-size: 14px; }
+
+    .prompts { background: #fff; }
+    .prompt-block { max-width: 880px; margin: 0 auto 32px; background: #f5f7fb; border-radius: 14px; border: 1px solid #e6ecf5; overflow: hidden; }
+    .prompt-head { padding: 20px 28px; border-bottom: 1px solid #e6ecf5; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .prompt-head .label { display: flex; align-items: center; gap: 12px; }
+    .prompt-head .badge { background: #1d6ff5; color: #fff; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 12px; letter-spacing: 0.5px; }
+    .prompt-head h3 { font-size: 19px; font-weight: 700; color: #0b1a2e; }
+    .copy-btn { background: #0b1a2e; color: #fff; border: none; padding: 9px 18px; border-radius: 6px; font-size: 13px; font-weight: 600; font-family: 'Heebo', sans-serif; cursor: pointer; transition: background 0.2s; display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .copy-btn:hover { background: #1a3a6e; }
+    .copy-btn.copied { background: #22c55e; }
+    .prompt-body { padding: 24px 28px; direction: ltr; text-align: left; }
+    .prompt-body pre { font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 13.5px; line-height: 1.7; color: #1a1a1a; white-space: pre-wrap; word-wrap: break-word; max-height: 360px; overflow-y: auto; padding-left: 8px; }
+    .prompt-body pre::-webkit-scrollbar { width: 8px; }
+    .prompt-body pre::-webkit-scrollbar-thumb { background: #c0c8d6; border-radius: 4px; }
+
+    .workflow { background: linear-gradient(135deg, #0b1a2e 0%, #1a3a6e 100%); color: #fff; }
+    .workflow .section-head h2 { color: #fff; }
+    .workflow .section-head p { color: #a8c0e0; }
+    .timeline { max-width: 880px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .timeline-item { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 22px 18px; text-align: center; transition: all 0.2s; }
+    .timeline-item:hover { background: rgba(255,255,255,0.08); transform: translateY(-3px); }
+    .timeline-item .hour { display: inline-block; background: #1d6ff5; color: #fff; padding: 4px 14px; border-radius: 14px; font-size: 12px; font-weight: 700; margin-bottom: 14px; letter-spacing: 0.5px; }
+    .timeline-item h4 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 10px; }
+    .timeline-item p { font-size: 13px; color: #a8c0e0; line-height: 1.65; }
+
+    .opt-in { background: #fff; padding-bottom: 90px; }
+    .opt-in-card { max-width: 620px; margin: 0 auto; background: #f5f7fb; border: 1px solid #e6ecf5; border-radius: 16px; padding: 40px 36px; text-align: center; }
+    .opt-in-card h3 { font-size: 24px; font-weight: 800; color: #0b1a2e; margin-bottom: 12px; }
+    .opt-in-card p { font-size: 15px; color: #555; line-height: 1.7; margin-bottom: 22px; }
+    .opt-in-form { display: flex; flex-direction: column; gap: 10px; max-width: 460px; margin: 0 auto; }
+    .opt-in-form .row { display: flex; gap: 10px; }
+    .opt-in-form .row > * { flex: 1; }
+    .opt-in-form input { padding: 12px 16px; border-radius: 8px; border: 1.5px solid #d0d8e6; background: #fff; font-size: 15px; font-family: 'Heebo', sans-serif; outline: none; transition: border-color 0.2s; width: 100%; }
+    .opt-in-form input:focus { border-color: #1d6ff5; }
+    .opt-in-form button { background: #1d6ff5; color: #fff; border: none; padding: 13px 28px; border-radius: 8px; font-size: 15px; font-weight: 700; font-family: 'Heebo', sans-serif; cursor: pointer; margin-top: 4px; }
+    .opt-in-form button:hover { background: #1558d0; }
+    .opt-in-card .privacy { font-size: 12px; color: #888; margin-top: 14px; }
+
+    footer { background: #0b1a2e; padding: 28px 60px; text-align: center; color: #6a8caf; font-size: 14px; }
+    footer a { color: #6a8caf; text-decoration: none; }
+    footer a:hover { color: #fff; }
+
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      nav ul { gap: 14px; }
+      .hero { padding: 60px 20px 70px; }
+      .hero h1 { font-size: 34px; }
+      .hero .lede { font-size: 16px; }
+      .hero-stats { gap: 28px; }
+      .hero-stats .stat .num { font-size: 28px; }
+      section { padding: 50px 20px; }
+      .section-head h2 { font-size: 26px; }
+      .inside-grid { grid-template-columns: 1fr 1fr; }
+      .timeline { grid-template-columns: 1fr 1fr; }
+      .prompt-head { flex-direction: column; align-items: flex-start; }
+      .prompt-body pre { font-size: 12px; max-height: 280px; }
+      .opt-in-form .row { flex-direction: column; }
+      footer { padding: 24px 20px; }
+    }
+    @media (max-width: 480px) {
+      .inside-grid { grid-template-columns: 1fr; }
+      .timeline { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/en/" class="logo">Shavit Zamir</a>
+    <ul>
+      <li><a href="/en/#about">About</a></li>
+      <li><a href="/en/#services">Services</a></li>
+      <li><a href="/en/#contact">Contact</a></li>
+      <li><a href="/30-reels/" class="lang-toggle" title="עברית">🇮🇱 HE</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <canvas id="neuralCanvas"></canvas>
+    <span class="badge">FREE TEMPLATE · CLAUDE PROJECT</span>
+    <h1>30 Reels in 4 Hours —<br/>without writing a word yourself</h1>
+    <p class="lede">
+      The full template for planning a whole month of content in a single session. Claude Project Instructions, a prompt that generates 30 ideas in one shot, an agent that filters out the 10 weakest, and a prompt that writes a complete script for every approved idea.
+    </p>
+    <div class="hero-stats">
+      <div class="stat"><span class="num">4</span><span class="lbl">PROMPTS</span></div>
+      <div class="stat"><span class="num">30</span><span class="lbl">REELS PER MONTH</span></div>
+      <div class="stat"><span class="num">4h</span><span class="lbl">ONE SESSION</span></div>
+    </div>
+    <div class="hero-buttons">
+      <a href="#prompts" class="btn-primary">Take the template ↓</a>
+      <a href="#how" class="btn-outline">How it works</a>
+    </div>
+  </section>
+
+  <section class="whats-inside" id="inside">
+    <div class="section-head">
+      <h2>What's in the package</h2>
+      <p>4 components that connect into one workflow. Each solves a different part of writing content.</p>
+    </div>
+    <div class="inside-grid">
+      <div class="inside-card">
+        <span class="num">1</span>
+        <h3>Project Instructions</h3>
+        <p>Tell Claude who you are, who the audience is, what hooks work — so it stops giving you generic content.</p>
+      </div>
+      <div class="inside-card">
+        <span class="num">2</span>
+        <h3>Idea Engine</h3>
+        <p>A prompt that generates 30 ideas in one go, split across 6 categories, each with a hook and a visual.</p>
+      </div>
+      <div class="inside-card">
+        <span class="num">3</span>
+        <h3>The Critic</h3>
+        <p>A critic agent that scores every idea on 4 axes and kills the weakest 10 — so you only film gold.</p>
+      </div>
+      <div class="inside-card">
+        <span class="num">4</span>
+        <h3>Script Writer</h3>
+        <p>A prompt that takes an approved idea and turns it into a full 60-second script — hook, value, twist, CTA.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="how-use" id="how">
+    <div class="section-head">
+      <h2>How to use it</h2>
+      <p>One-time project setup. After that — one session a month.</p>
+    </div>
+    <div class="how-use-content">
+      <ol>
+        <li>Open a new project in Claude <strong>(claude.ai → New Project)</strong></li>
+        <li>Copy the Project Instructions below into the Instructions field, replacing the curly-brace placeholders with your details</li>
+        <li>Upload 2–5 of your best scripts as Project Knowledge files so Claude learns your style</li>
+        <li>Run the three prompts in order: <strong>Idea Engine → Critic → Script Writer</strong></li>
+      </ol>
+      <p style="text-align:center; margin-top: 28px; color:#666; font-size: 14px;">
+        💡 <strong>Tip:</strong> The templates are in English because Claude works best with English in structured prompts. Want output in another language? Just add to Project Instructions: <code style="background:#fff; padding:2px 8px; border-radius:4px;">"Respond in [language]."</code>
+      </p>
+    </div>
+  </section>
+
+  <section class="prompts" id="prompts">
+    <div class="section-head">
+      <h2>The templates</h2>
+      <p>Click "Copy" on each block and paste into Claude. Replace the parts in {{ curly braces }} with your details.</p>
+    </div>
+
+    <div class="prompt-block">
+      <div class="prompt-head">
+        <div class="label">
+          <span class="badge">01</span>
+          <h3>Project Instructions</h3>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt(this, 'p1')">📋 Copy</button>
+      </div>
+      <div class="prompt-body">
+        <pre id="p1">You are my dedicated short-form video strategist. You help me plan, ideate, and script viral 60-second videos for TikTok and Instagram Reels. Treat every output as content that will be filmed and posted — not as a brainstorm.
+
+# About me
+- Creator name: {{ YOUR NAME / HANDLE }}
+- Niche: {{ e.g., "AI tools and automation for solo creators" }}
+- Primary platforms: TikTok and Instagram Reels (60-sec format)
+- Language of the videos: {{ Hebrew / English / Bilingual }}
+- Posting cadence: {{ e.g., "1 video per day, 30 per month" }}
+
+# My audience
+- Who they are: {{ e.g., "freelancers, content creators, small business owners aged 25–45" }}
+- Their pain: {{ e.g., "drowning in repetitive work, want to use AI but feel lost" }}
+- Their level: {{ e.g., "non-technical, basic Claude/ChatGPT users" }}
+- What they share: videos that feel like a hack, save them time/money, or show a real result
+
+# My voice
+- Tone: confident but not lecturing, slightly cheeky, I show stakes (real money, real time, real failures)
+- I never use generic openers like "Hey guys" or "So today" — every hook is a pattern interrupt
+- I speak like a peer, not an expert above the audience
+- I use specific numbers and concrete examples — never vague claims
+- I do NOT do clickbait that the video can't deliver on. Hooks must be honest.
+
+# What "viral" means to me (in priority order)
+1. Saves and shares — the strongest algorithmic signal on Reels and TikTok in 2026
+2. Completion rate above 70% — every second must earn its place
+3. Comments that ask for the resource — a CTA that drives a specific reply
+4. Followers that come back for the next video in a series
+
+# Hard rules for every output you give me
+1. No generic ideas. If the idea could apply to any creator in any niche, it's wrong.
+2. Stakes before cleverness. Real money, real time, real consequence > witty wordplay.
+3. Hooks, not topics. Every idea must start with the exact line I'd say to camera.
+4. Show the visual. Every idea must include a specific visual hook.
+5. No filler structure. Skip introductions, summaries, and "I hope this helps."
+6. When in doubt, get more concrete. Replace "many" with the exact number.
+
+# Hook formulas I trust
+- Pattern interrupt: Start mid-action or mid-sentence with bold visual contrast.
+- Curiosity gap: "Nobody talks about this, but…" + a specific surprising fact.
+- Pain first: "If you've ever [hyper-specific struggle], this is for you."
+- Myth bust: "Everyone says X — here's why that's completely wrong."
+- Bold proof: "This one thing got me [concrete number] in [short time]."
+- Direct address: "Hey [specific niche] — you're doing this wrong every single day."
+
+Combine at least two psychological triggers per hook.
+
+# What you should never do
+- Don't propose ideas that require expensive production.
+- Don't suggest trends without naming a specific recent example I can verify.
+- Don't ever recommend "follow for more" as a CTA.
+- Don't smooth over weak ideas with extra adjectives.
+- Don't pad outputs.</pre>
+      </div>
+    </div>
+
+    <div class="prompt-block">
+      <div class="prompt-head">
+        <div class="label">
+          <span class="badge">02</span>
+          <h3>Idea Engine — generates 30 ideas in one shot</h3>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt(this, 'p2')">📋 Copy</button>
+      </div>
+      <div class="prompt-body">
+        <pre id="p2">Generate 30 short-form video ideas for me to film this month.
+
+Constraints:
+
+1. Distribute across these 6 categories — exactly 5 ideas per category:
+   - Stunts and spectacles (an AI agent doing something tangible in the real world)
+   - Time or money saved (concrete, measurable result)
+   - Edge / "is this even allowed" (provocative but honest)
+   - Niche-specific (parents / freelancers / students / creators / one specific niche)
+   - Comparisons and battles (X vs. Y, but with a real-task twist)
+   - Build in public (shows progress on a real project I'm building)
+
+2. Each idea must include:
+   - Hook line — the exact words I'd say in seconds 0–3 (max 18 words)
+   - Mechanic — what makes it watchable, in one sentence
+   - Visual — what frame 1 looks like (so I can picture it)
+   - Stake — what's actually on the line (money, time, failure, surprise)
+   - Trigger — which psychological trigger combo it hits
+
+3. Reject any idea that:
+   - Could apply to any niche
+   - Has no clear visual hook
+   - Has been done to death (e.g., "5 prompts that will change your life")
+   - Requires production I don't have
+
+4. After the 30 ideas, give me a one-line "vibe check" per category — which is your strongest in that category, and why.
+
+Format the output as a clean markdown table with columns: # | Category | Hook | Mechanic | Visual | Stake | Trigger.
+
+Do not write any introduction or summary. Start with the table.</pre>
+      </div>
+    </div>
+
+    <div class="prompt-block">
+      <div class="prompt-head">
+        <div class="label">
+          <span class="badge">03</span>
+          <h3>The Critic — kills the weakest 10</h3>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt(this, 'p3')">📋 Copy</button>
+      </div>
+      <div class="prompt-body">
+        <pre id="p3">You are now a ruthless content critic. The 30 ideas above are candidates — but I only have time to film 20 this month. Your job is to kill the weakest 10.
+
+For each of the 30 ideas, score on these 4 axes (1–10 each):
+
+1. Hook strength — Does the first line stop the scroll? Score 1 if generic, 10 if almost dishonestly compelling.
+2. Visual clarity — Can I picture frame 1 instantly? Score 1 if vague, 10 if it's a specific shot.
+3. Stake realness — Is something actually on the line? Score 1 if it's just info, 10 if there's real consequence.
+4. Differentiation — Has someone in my niche already done this? Score 1 if oversaturated, 10 if I'd be first.
+
+Compute a total (max 40). Then:
+
+- Top 20 — KEEP. Order them from highest to lowest, with a one-line note on which day to film them.
+- Bottom 10 — KILL. For each killed idea, give a one-sentence reason and one specific replacement angle that would have saved it.
+
+Be honest. If the same hook formula appears 5 times across the 30, kill 4 of them and tell me to vary. If an idea sounds clever but has no stake, kill it.
+
+Output as two clean tables: KEEP (sorted by score) and KILL (with replacement notes). No introduction. No summary.</pre>
+      </div>
+    </div>
+
+    <div class="prompt-block">
+      <div class="prompt-head">
+        <div class="label">
+          <span class="badge">04</span>
+          <h3>Script Writer — full 60-second script</h3>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt(this, 'p4')">📋 Copy</button>
+      </div>
+      <div class="prompt-body">
+        <pre id="p4">Write a complete 60-second script for the following idea, using my standard 5-part framework.
+
+IDEA:
+{{ PASTE HOOK + MECHANIC + VISUAL FROM THE APPROVED LIST }}
+
+Framework — produce all 5 sections:
+
+1. HOOK (0–3 sec, max 15 spoken words) — exact line to camera + on-screen text + visual cue.
+2. PROBLEM / CONTEXT (3–15 sec, ~40 words) — why the viewer should care. Use a specific number or contrast.
+3. VALUE (15–50 sec, ~90 words) — the actual payload. Use concrete steps, names, numbers.
+4. TWIST / PAYOFF (50–55 sec, ~20 words) — the rewatch trigger. A reveal that makes them want to scroll back to second 0.
+5. CTA (55–60 sec, max 15 words) — drive a specific reply, save, or share. Never "follow for more."
+
+Then add:
+
+- Platform notes: estimated runtime, word count, recommended sound mood, editing notes.
+- Caption: 3 lines max, no emojis, line 1 = hook, line 2 = value tease, line 3 = CTA.
+- Hashtags: 10–12 mixed (3 niche under 100K, 4–5 mid 100K–1M, 3–4 broad over 1M). No #fyp, no #viral.
+- Cover frame suggestion for Instagram.
+
+Hard requirements:
+
+- Spoken word count must be 170–185.
+- The hook must NOT start with "Hey," "So," "Today," "Welcome," or "In this video."
+- The CTA must drive a measurable action.
+- If any part feels weaker than the rest, flag it and propose 2 alternative versions of that section.</pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="workflow">
+    <div class="section-head">
+      <h2>The 4-hour session</h2>
+      <p>A 4-hour block. No meetings. Phone on silent. Here's what it looks like.</p>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item">
+        <span class="hour">HOUR 1</span>
+        <h4>Setup &amp; ideation</h4>
+        <p>10 min analytics · 5 min run Idea Engine · 45 min reading every idea aloud.</p>
+      </div>
+      <div class="timeline-item">
+        <span class="hour">HOUR 2</span>
+        <h4>Filtering</h4>
+        <p>10 min run the Critic · 30 min approve/reject · 20 min group by shoot type.</p>
+      </div>
+      <div class="timeline-item">
+        <span class="hour">HOUR 3</span>
+        <h4>Scripts in parallel</h4>
+        <p>Open 5–10 Claude chats and write 20–25 scripts in parallel. No editing — just produce.</p>
+      </div>
+      <div class="timeline-item">
+        <span class="hour">HOUR 4</span>
+        <h4>Polish &amp; pack</h4>
+        <p>30 min read aloud · 15 min compare hooks · 15 min build a shoot board.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="opt-in">
+    <div class="opt-in-card">
+      <h3>Want a template like this every month?</h3>
+      <p>I send one a month — a template, prompt, or workflow that actually works. No spam. Unsubscribe anytime.</p>
+      <form class="opt-in-form" action="https://formsubmit.co/zamir.shavit@gmail.com" method="POST">
+        <input type="hidden" name="_subject" value="Subscribe — 30 reels page (EN)" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_next" value="https://shavitzamirai.com/en/30-reels/?subscribed=true" />
+        <input type="hidden" name="source" value="30-reels-en-page" />
+        <input type="email" name="email" placeholder="Your email *" required />
+        <div class="row">
+          <input type="text" name="name" placeholder="Name (optional)" />
+          <input type="tel" name="phone" placeholder="Phone (optional)" />
+        </div>
+        <input type="text" name="business_or_role" placeholder="Business or role (optional)" />
+        <button type="submit">Count me in</button>
+      </form>
+      <p class="privacy">Your details are never shared.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 Shavit Zamir · <a href="/en/">Home</a> · <a href="mailto:zamir.shavit@gmail.com">zamir.shavit@gmail.com</a></p>
+  </footer>
+
+  <script>
+    function copyPrompt(btn, id) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const original = btn.innerHTML;
+        btn.innerHTML = '✓ Copied';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.innerHTML = original; btn.classList.remove('copied'); }, 2000);
+      });
+    }
+
+    if (new URLSearchParams(window.location.search).get('subscribed') === 'true') {
+      const card = document.querySelector('.opt-in-card');
+      if (card) card.innerHTML = '<h3 style="color:#22c55e;">✓ You\'re in</h3><p>Next template arrives in about three weeks. Until then — good luck with your first 30 Reels.</p>';
+    }
+
+    const canvas = document.getElementById('neuralCanvas');
+    const ctx = canvas.getContext('2d');
+    function resize() { const hero = canvas.parentElement; canvas.width = hero.offsetWidth; canvas.height = hero.offsetHeight; }
+    resize(); window.addEventListener('resize', resize);
+    function makeNodes() { return Array.from({length:60}, () => ({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-0.5)*0.5,vy:(Math.random()-0.5)*0.5,r:Math.random()*1.8+0.8})); }
+    let nodes = makeNodes();
+    window.addEventListener('resize', () => { nodes = makeNodes(); });
+    function loop() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      for (let i=0;i<nodes.length;i++) for (let j=i+1;j<nodes.length;j++) {
+        const dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y, d=Math.sqrt(dx*dx+dy*dy);
+        if (d<130) { ctx.strokeStyle=`rgba(99,179,255,${(1-d/130)*0.35})`; ctx.lineWidth=0.6; ctx.beginPath(); ctx.moveTo(nodes[i].x,nodes[i].y); ctx.lineTo(nodes[j].x,nodes[j].y); ctx.stroke(); }
+      }
+      nodes.forEach(n => {
+        const grd = ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r*3);
+        grd.addColorStop(0,'rgba(99,179,255,0.9)'); grd.addColorStop(1,'rgba(29,111,245,0)');
+        ctx.beginPath(); ctx.arc(n.x,n.y,n.r*3,0,Math.PI*2); ctx.fillStyle=grd; ctx.fill();
+        ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2); ctx.fillStyle='#63b3ff'; ctx.fill();
+        n.x += n.vx; n.y += n.vy;
+        if (n.x<0||n.x>canvas.width) n.vx*=-1; if (n.y<0||n.y>canvas.height) n.vy*=-1;
+      });
+      requestAnimationFrame(loop);
+    }
+    loop();
+  </script>
+</body>
+</html>

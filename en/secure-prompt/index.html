@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Secure Prompt — Zero Vulnerabilities | Shavit Zamir</title>
+  <meta name="description" content="The prompt I send to Claude before every code request. Prevents XSS, SQL injection, and auth-token leaks. Free." />
+  <meta property="og:title" content="The Secure Prompt — Zero Vulnerabilities" />
+  <meta property="og:description" content="The prompt I send to Claude before every code request. Eight out of ten AI apps I tested were exposed. This prompt prevents that. Free." />
+  <meta property="og:type" content="website" />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Heebo', sans-serif; background: #f5f5f5; color: #1a1a1a; direction: ltr; line-height: 1.6; }
+
+    nav { background: #0b1a2e; padding: 18px 60px; display: flex; justify-content: space-between; align-items: center; }
+    nav .logo { color: #fff; font-size: 18px; font-weight: 700; text-decoration: none; }
+    nav ul { list-style: none; display: flex; gap: 32px; align-items: center; }
+    nav ul li a { color: #ccd6f6; text-decoration: none; font-size: 15px; font-weight: 400; transition: color 0.2s; }
+    nav ul li a:hover { color: #fff; }
+    .lang-toggle { display: inline-flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #fff !important; font-weight: 700 !important; padding: 5px 12px; border-radius: 6px; font-size: 13px !important; letter-spacing: 0.5px; transition: background 0.2s; }
+    .lang-toggle:hover { background: rgba(255,255,255,0.18); color: #fff !important; }
+
+    .hero { background: linear-gradient(135deg, #0b1a2e 0%, #1c0f2e 60%, #3d1538 100%); padding: 90px 60px 100px; text-align: center; position: relative; overflow: hidden; }
+    #neuralCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+    .hero > * { position: relative; z-index: 1; }
+    .hero .badge { display: inline-block; background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4); color: #fca5a5; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; margin-bottom: 24px; }
+    .hero h1 { font-size: 56px; font-weight: 800; color: #fff; line-height: 1.15; margin-bottom: 22px; max-width: 860px; margin-inline: auto; }
+    .hero .lede { font-size: 18px; color: #d6c0d0; line-height: 1.75; max-width: 700px; margin: 0 auto 36px; font-weight: 400; }
+    .hero-stats { display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; margin-bottom: 40px; }
+    .hero-stats .stat { text-align: center; }
+    .hero-stats .stat .num { display: block; font-size: 36px; font-weight: 800; color: #fff; line-height: 1; }
+    .hero-stats .stat .lbl { display: block; font-size: 13px; color: #c9aabd; margin-top: 6px; letter-spacing: 0.5px; }
+    .hero-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { background: #ef4444; color: #fff; border: none; padding: 14px 32px; border-radius: 8px; font-size: 16px; font-weight: 600; font-family: 'Heebo', sans-serif; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
+    .btn-primary:hover { background: #dc2626; transform: translateY(-1px); }
+    .btn-outline { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.3); padding: 12px 30px; border-radius: 8px; font-size: 16px; font-weight: 600; font-family: 'Heebo', sans-serif; cursor: pointer; transition: all 0.2s; text-decoration: none; display: inline-block; }
+    .btn-outline:hover { border-color: #fff; }
+
+    section { padding: 80px 60px; }
+    .section-head { max-width: 720px; margin: 0 auto 56px; text-align: center; }
+    .section-head h2 { font-size: 36px; font-weight: 800; color: #0b1a2e; margin-bottom: 16px; }
+    .section-head p { font-size: 17px; color: #555; line-height: 1.75; }
+
+    .whats-inside { background: #fff; }
+    .inside-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; max-width: 980px; margin: 0 auto; }
+    .inside-card { background: #f5f7fb; border-radius: 14px; padding: 28px 22px; border: 1px solid #e6ecf5; transition: all 0.2s; }
+    .inside-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(11,26,46,0.08); }
+    .inside-card .num { display: inline-block; background: #ef4444; color: #fff; width: 32px; height: 32px; border-radius: 50%; text-align: center; line-height: 32px; font-weight: 700; font-size: 14px; margin-bottom: 14px; }
+    .inside-card h3 { font-size: 17px; font-weight: 700; color: #0b1a2e; margin-bottom: 10px; }
+    .inside-card p { font-size: 14px; color: #555; line-height: 1.65; }
+
+    .vulns-bar { background: #f5f7fb; padding: 60px 60px; }
+    .vulns-bar h2 { text-align: center; font-size: 28px; font-weight: 800; color: #0b1a2e; margin-bottom: 36px; }
+    .vulns-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; max-width: 1000px; margin: 0 auto; }
+    .vuln-card { background: #fff; border: 1px solid #e6ecf5; border-left: 4px solid #ef4444; border-radius: 10px; padding: 22px 24px; }
+    .vuln-card .label { font-size: 12px; font-weight: 700; color: #ef4444; letter-spacing: 0.5px; margin-bottom: 8px; }
+    .vuln-card h4 { font-size: 17px; font-weight: 700; color: #0b1a2e; margin-bottom: 8px; }
+    .vuln-card p { font-size: 14px; color: #555; line-height: 1.7; }
+
+    .prompts { background: #fff; }
+    .prompt-block { max-width: 880px; margin: 0 auto 32px; background: #f5f7fb; border-radius: 14px; border: 1px solid #e6ecf5; overflow: hidden; }
+    .prompt-head { padding: 20px 28px; border-bottom: 1px solid #e6ecf5; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .prompt-head .label { display: flex; align-items: center; gap: 12px; }
+    .prompt-head .badge { background: #ef4444; color: #fff; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 12px; letter-spacing: 0.5px; }
+    .prompt-head h3 { font-size: 19px; font-weight: 700; color: #0b1a2e; }
+    .copy-btn { background: #0b1a2e; color: #fff; border: none; padding: 9px 18px; border-radius: 6px; font-size: 13px; font-weight: 600; font-family: 'Heebo', sans-serif; cursor: pointer; transition: background 0.2s; display: inline-flex; align-items: center; gap: 6px; flex-shrink: 0; }
+    .copy-btn:hover { background: #1a3a6e; }
+    .copy-btn.copied { background: #22c55e; }
+    .prompt-intro { padding: 18px 28px 0; font-size: 15px; color: #555; line-height: 1.75; background: #f5f7fb; }
+    .prompt-intro strong { color: #0b1a2e; }
+    .prompt-body { padding: 24px 28px; direction: ltr; text-align: left; }
+    .prompt-body pre { font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 13.5px; line-height: 1.7; color: #1a1a1a; white-space: pre-wrap; word-wrap: break-word; max-height: 460px; overflow-y: auto; padding-left: 8px; }
+    .prompt-body pre::-webkit-scrollbar { width: 8px; }
+    .prompt-body pre::-webkit-scrollbar-thumb { background: #c0c8d6; border-radius: 4px; }
+
+    .how-use { background: linear-gradient(135deg, #0b1a2e 0%, #1c0f2e 100%); color: #fff; }
+    .how-use .section-head h2 { color: #fff; }
+    .how-use .section-head p { color: #d6c0d0; }
+    .how-use-flow { max-width: 760px; margin: 0 auto; }
+    .how-use-flow .step { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 20px 26px; margin-bottom: 14px; display: flex; gap: 18px; align-items: flex-start; transition: all 0.2s; }
+    .how-use-flow .step:hover { background: rgba(255,255,255,0.08); transform: translateX(3px); }
+    .how-use-flow .step-num { background: #ef4444; color: #fff; width: 36px; height: 36px; border-radius: 50%; text-align: center; line-height: 36px; font-weight: 700; font-size: 16px; flex-shrink: 0; }
+    .how-use-flow .step-body h4 { font-size: 17px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+    .how-use-flow .step-body p { font-size: 14px; color: #c9aabd; line-height: 1.7; }
+
+    .opt-in { background: #fff; padding-bottom: 90px; }
+    .opt-in-card { max-width: 620px; margin: 0 auto; background: #f5f7fb; border: 1px solid #e6ecf5; border-radius: 16px; padding: 40px 36px; text-align: center; }
+    .opt-in-card h3 { font-size: 24px; font-weight: 800; color: #0b1a2e; margin-bottom: 12px; }
+    .opt-in-card p { font-size: 15px; color: #555; line-height: 1.7; margin-bottom: 22px; }
+    .opt-in-form { display: flex; flex-direction: column; gap: 10px; max-width: 460px; margin: 0 auto; }
+    .opt-in-form .row { display: flex; gap: 10px; }
+    .opt-in-form .row > * { flex: 1; }
+    .opt-in-form input { padding: 12px 16px; border-radius: 8px; border: 1.5px solid #d0d8e6; background: #fff; font-size: 15px; font-family: 'Heebo', sans-serif; outline: none; transition: border-color 0.2s; width: 100%; }
+    .opt-in-form input:focus { border-color: #ef4444; }
+    .opt-in-form button { background: #ef4444; color: #fff; border: none; padding: 13px 28px; border-radius: 8px; font-size: 15px; font-weight: 700; font-family: 'Heebo', sans-serif; cursor: pointer; margin-top: 4px; }
+    .opt-in-form button:hover { background: #dc2626; }
+    .opt-in-card .privacy { font-size: 12px; color: #888; margin-top: 14px; }
+
+    footer { background: #0b1a2e; padding: 28px 60px; text-align: center; color: #6a8caf; font-size: 14px; }
+    footer a { color: #6a8caf; text-decoration: none; }
+    footer a:hover { color: #fff; }
+
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      nav ul { gap: 14px; }
+      .hero { padding: 60px 20px 70px; }
+      .hero h1 { font-size: 34px; }
+      .hero .lede { font-size: 16px; }
+      .hero-stats { gap: 28px; }
+      .hero-stats .stat .num { font-size: 28px; }
+      section { padding: 50px 20px; }
+      .section-head h2 { font-size: 26px; }
+      .inside-grid, .vulns-grid { grid-template-columns: 1fr; }
+      .vulns-bar { padding: 40px 20px; }
+      .prompt-head { flex-direction: column; align-items: flex-start; }
+      .prompt-body pre { font-size: 12px; max-height: 360px; }
+      .opt-in-form .row { flex-direction: column; }
+      footer { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/en/" class="logo">Shavit Zamir</a>
+    <ul>
+      <li><a href="/en/#about">About</a></li>
+      <li><a href="/en/#services">Services</a></li>
+      <li><a href="/en/#free">Free Content</a></li>
+      <li><a href="/en/#contact">Contact</a></li>
+      <li><a href="/secure-prompt/" class="lang-toggle" title="עברית">🇮🇱 HE</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <canvas id="neuralCanvas"></canvas>
+    <span class="badge">FREE · 3 COMPLETE PROMPTS</span>
+    <h1>The Secure Prompt —<br/>0 vulnerabilities in code AI writes for you</h1>
+    <p class="lede">
+      Eight out of ten AI apps I tested were vulnerable — to the same three lines of code, every time. This prompt is what I send to Claude before every code request. Since I started using it: zero vulnerabilities. One minute to set up, three blocks, and after that the code is secure by default.
+    </p>
+    <div class="hero-stats">
+      <div class="stat"><span class="num">3</span><span class="lbl">READY PROMPTS</span></div>
+      <div class="stat"><span class="num">10</span><span class="lbl">SECURITY RULES</span></div>
+      <div class="stat"><span class="num">0</span><span class="lbl">VULNERABILITIES</span></div>
+    </div>
+    <div class="hero-buttons">
+      <a href="#prompts" class="btn-primary">Take the prompts ↓</a>
+      <a href="#vulns" class="btn-outline">What it prevents</a>
+    </div>
+  </section>
+
+  <section class="whats-inside">
+    <div class="section-head">
+      <h2>What's inside</h2>
+      <p>3 prompts that connect into a single security workflow. Each one solves a different part.</p>
+    </div>
+    <div class="inside-grid">
+      <div class="inside-card">
+        <span class="num">1</span>
+        <h3>Security Project Instructions</h3>
+        <p>Define the 10 security rules Claude must apply automatically to every line of code it writes for you.</p>
+      </div>
+      <div class="inside-card">
+        <span class="num">2</span>
+        <h3>Per-request preamble</h3>
+        <p>One snippet you paste before every code request — forces Claude to map vulnerabilities before writing the code itself.</p>
+      </div>
+      <div class="inside-card">
+        <span class="num">3</span>
+        <h3>Audit prompt</h3>
+        <p>Audits existing code. Scans for the 8 most common vulnerabilities and returns a prioritized list with concrete fixes.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="vulns-bar" id="vulns">
+    <h2>What this prompt prevents</h2>
+    <div class="vulns-grid">
+      <div class="vuln-card">
+        <div class="label">XSS</div>
+        <h4>Code injection via user input</h4>
+        <p>dangerouslySetInnerHTML with unsanitized content. The prompt forces sanitization of any user-rendered HTML.</p>
+      </div>
+      <div class="vuln-card">
+        <div class="label">SQL INJECTION</div>
+        <h4>Query injection</h4>
+        <p>String concatenation in SQL. Prompt forbids it entirely — always parameterized queries.</p>
+      </div>
+      <div class="vuln-card">
+        <div class="label">TOKEN THEFT</div>
+        <h4>Auth token leakage</h4>
+        <p>localStorage for auth tokens = wide-open XSS exposure. Prompt enforces httpOnly cookies.</p>
+      </div>
+      <div class="vuln-card">
+        <div class="label">SECRETS LEAK</div>
+        <h4>Frontend key exposure</h4>
+        <p>API keys in client code. Prompt rejects this and routes them to server-side environment variables.</p>
+      </div>
+      <div class="vuln-card">
+        <div class="label">AUTHORIZATION</div>
+        <h4>Trusting the client for user identity</h4>
+        <p>Using a client-supplied userId. Prompt forces server-side re-validation on every action.</p>
+      </div>
+      <div class="vuln-card">
+        <div class="label">RATE LIMITING</div>
+        <h4>Unrestricted endpoints</h4>
+        <p>Endpoints open to the world without limits. Prompt adds a working middleware example, not a TODO.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="prompts" id="prompts">
+    <div class="section-head">
+      <h2>The prompts</h2>
+      <p>Click "Copy" on each block and paste into Claude. Order of use: Project Instructions (one-time) → Preamble (before each request) → Audit (for existing code).</p>
+    </div>
+
+    <div class="prompt-block">
+      <div class="prompt-head">
+        <div class="label">
+          <span class="badge">01</span>
+          <h3>Security Project Instructions</h3>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt(this, 'p1')">📋 Copy</button>
+      </div>
+      <div class="prompt-intro">
+        <strong>How to use:</strong> Open a new project in Claude (claude.ai → New Project). Paste this prompt into the Instructions field. From now on, every code request in this project is secure by default.
+      </div>
+      <div class="prompt-body">
+        <pre id="p1">You are my secure code generation partner. I am building applications with you and I do not always read the code carefully. Your job is to make sure that even when I don't catch it, the code you produce is secure by default.
+
+# Security defaults (always apply, never ask)
+
+1. **User input is hostile.** Treat every input from a user, query string, request body, or external API as potentially malicious. Validate, sanitize, and parameterize.
+
+2. **Never use string concatenation for SQL queries.** Always use parameterized queries / prepared statements. If the language doesn't support it, flag it explicitly.
+
+3. **Never use `dangerouslySetInnerHTML` (or equivalent raw-HTML rendering) without a sanitizer.** If user content needs to be rendered as HTML, use sanitize-html, DOMPurify, or equivalent. If you can avoid rendering raw HTML entirely, do that instead.
+
+4. **Never store auth tokens in localStorage or sessionStorage.** Use httpOnly cookies with Secure and SameSite=Strict flags. The browser sends them automatically; JavaScript cannot read them.
+
+5. **Never expose secrets to the client.** API keys, database credentials, and signing secrets must be in server-side environment variables only. If I ask for code that does this insecurely, refuse and explain why.
+
+6. **Never trust user IDs from the client for authorization.** Always re-verify on the server that the authenticated user owns or can access the resource they're requesting.
+
+7. **Always set rate limiting on public-facing endpoints** that hit external APIs, databases, or LLMs. Provide a working middleware example, not a TODO.
+
+8. **CORS:** never default to `*` for production endpoints. Always pin to specific origins.
+
+9. **Logging:** never log secrets, tokens, passwords, or full request bodies. Scrub PII by default.
+
+10. **File uploads:** validate MIME type AND file extension AND file content (magic bytes). Save outside the web root. Generate new filenames; never use user-provided ones.
+
+# When you write code, you must include
+
+- A 1-line `// SECURITY:` comment near each security-relevant line explaining the protection
+- A `// FLAGGED:` comment if you intentionally do something less secure for simplicity (so I can find and fix it later)
+- A short list at the end labeled `Security checklist for this code:` summarizing what protections were applied and what was NOT covered
+
+# When you find an issue I should know about
+
+If my request implies a vulnerable pattern (e.g., "store the token in localStorage"), do not silently fix it. Tell me explicitly:
+"I'm not doing X because it would expose Y. Instead I did Z. Here's what changes for you: ..."
+
+# Format
+
+Code first. Explanation after. No filler. No "I hope this helps."</pre>
+      </div>
+    </div>
+
+    <div class="prompt-block">
+      <div class="prompt-head">
+        <div class="label">
+          <span class="badge">02</span>
+          <h3>Per-request preamble</h3>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt(this, 'p2')">📋 Copy</button>
+      </div>
+      <div class="prompt-intro">
+        <strong>How to use:</strong> Paste this prompt before every new code request (even in a project that's already configured). It forces Claude to think about vulnerabilities before writing, not after. Replace `{{ YOUR REQUEST }}` with your actual ask.
+      </div>
+      <div class="prompt-body">
+        <pre id="p2">Before writing this code, do four things in order:
+
+1. State the 3 most likely security vulnerabilities for this type of feature
+2. Choose the protection for each (specific library, pattern, or code construct)
+3. Write the code with the protections applied
+4. End with a one-line "Audit:" listing what's covered and what is NOT
+
+If my request itself is insecure (e.g., asks you to store secrets in client code, render raw user HTML, or trust a client-provided user ID), refuse and propose a secure alternative before writing anything.
+
+Now, the request:
+
+{{ YOUR REQUEST }}</pre>
+      </div>
+    </div>
+
+    <div class="prompt-block">
+      <div class="prompt-head">
+        <div class="label">
+          <span class="badge">03</span>
+          <h3>Audit prompt for existing code</h3>
+        </div>
+        <button class="copy-btn" onclick="copyPrompt(this, 'p3')">📋 Copy</button>
+      </div>
+      <div class="prompt-intro">
+        <strong>How to use:</strong> Copy the prompt, paste your existing code where it says `{{ PASTE CODE }}`, and send it to Claude. You'll get a prioritized list with severity ratings and concrete fixes. If the code is clean — Claude says so explicitly, doesn't invent issues to fill space.
+      </div>
+      <div class="prompt-body">
+        <pre id="p3">Audit the code below for security issues. Check specifically for:
+
+- SQL injection (string concatenation in queries, raw user input in WHERE/ORDER BY)
+- XSS (dangerouslySetInnerHTML, innerHTML, unescaped user input in templates)
+- Insecure token storage (localStorage, sessionStorage for auth tokens)
+- Hardcoded secrets (API keys, passwords, signing secrets, database credentials)
+- Missing authorization checks (trusting client-provided user IDs, no resource ownership verification)
+- Missing rate limiting on public endpoints
+- Permissive CORS (`*` in production, missing origin checks)
+- Insecure file uploads (no MIME/magic-byte validation, user-controlled filenames)
+- Logging of sensitive data (full request bodies, auth headers, PII)
+- Vulnerable patterns in dependencies you can spot (eval of user input, command injection via shell)
+
+For each issue found, output:
+- Line number or function name
+- Severity: Critical / High / Medium / Low
+- Specific exploit scenario (one sentence — how an attacker would use this)
+- Concrete fix (working code snippet, not a description)
+
+If the code is clean for the items above, say so explicitly. Do not invent issues to fill space. Do not suggest "best practice" stylistic changes — only real security risks.
+
+Code:
+
+{{ PASTE CODE }}</pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="how-use">
+    <div class="section-head">
+      <h2>The full workflow</h2>
+      <p>3 minutes of one-time setup. After that it runs in the background on every code request.</p>
+    </div>
+    <div class="how-use-flow">
+      <div class="step">
+        <span class="step-num">1</span>
+        <div class="step-body">
+          <h4>Open a new project in Claude</h4>
+          <p>claude.ai → New Project. Name it something like "Secure Code". This is your home base for every code request from now on.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">2</span>
+        <div class="step-body">
+          <h4>Paste prompt #1 into Instructions</h4>
+          <p>The 10 security rules become a permanent default. Every future code request in this project applies them automatically.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">3</span>
+        <div class="step-body">
+          <h4>Before every code request — paste prompt #2</h4>
+          <p>Two seconds of work. Forces Claude to map the attack vector before it writes. This is the difference between vulnerable and secure code.</p>
+        </div>
+      </div>
+      <div class="step">
+        <span class="step-num">4</span>
+        <div class="step-body">
+          <h4>Audit existing code with prompt #3</h4>
+          <p>Once a month (or before a deploy), run the audit on your main code. You'll get a list of vulnerabilities with severity ratings and a concrete fix for each.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="opt-in">
+    <div class="opt-in-card">
+      <h3>Want a template like this every month?</h3>
+      <p>I send one a month — a template, prompt, or workflow that actually works. No spam. Unsubscribe anytime.</p>
+      <form class="opt-in-form" action="https://formsubmit.co/zamir.shavit@gmail.com" method="POST">
+        <input type="hidden" name="_subject" value="Subscribe — secure prompt page (EN)" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_next" value="https://shavitzamirai.com/en/secure-prompt/?subscribed=true" />
+        <input type="hidden" name="source" value="secure-prompt-en-page" />
+        <input type="email" name="email" placeholder="Your email *" required />
+        <div class="row">
+          <input type="text" name="name" placeholder="Name (optional)" />
+          <input type="tel" name="phone" placeholder="Phone (optional)" />
+        </div>
+        <input type="text" name="business_or_role" placeholder="Business or role (optional)" />
+        <button type="submit">Count me in</button>
+      </form>
+      <p class="privacy">Your details are never shared.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 Shavit Zamir · <a href="/en/">Home</a> · <a href="/en/30-reels/">30 Reels in 4 hours</a> · <a href="mailto:zamir.shavit@gmail.com">zamir.shavit@gmail.com</a></p>
+  </footer>
+
+  <script>
+    function copyPrompt(btn, id) {
+      const text = document.getElementById(id).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const original = btn.innerHTML;
+        btn.innerHTML = '✓ Copied';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.innerHTML = original; btn.classList.remove('copied'); }, 2000);
+      });
+    }
+
+    if (new URLSearchParams(window.location.search).get('subscribed') === 'true') {
+      const card = document.querySelector('.opt-in-card');
+      if (card) card.innerHTML = '<h3 style="color:#22c55e;">✓ You\'re in</h3><p>Next template arrives in about three weeks. Until then — happy secure shipping.</p>';
+    }
+
+    const canvas = document.getElementById('neuralCanvas');
+    const ctx = canvas.getContext('2d');
+    function resize() { const hero = canvas.parentElement; canvas.width = hero.offsetWidth; canvas.height = hero.offsetHeight; }
+    resize(); window.addEventListener('resize', resize);
+    function makeNodes() { return Array.from({length:60}, () => ({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-0.5)*0.5,vy:(Math.random()-0.5)*0.5,r:Math.random()*1.8+0.8})); }
+    let nodes = makeNodes();
+    window.addEventListener('resize', () => { nodes = makeNodes(); });
+    function loop() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      for (let i=0;i<nodes.length;i++) for (let j=i+1;j<nodes.length;j++) {
+        const dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y, d=Math.sqrt(dx*dx+dy*dy);
+        if (d<130) { ctx.strokeStyle=`rgba(239,68,68,${(1-d/130)*0.35})`; ctx.lineWidth=0.6; ctx.beginPath(); ctx.moveTo(nodes[i].x,nodes[i].y); ctx.lineTo(nodes[j].x,nodes[j].y); ctx.stroke(); }
+      }
+      nodes.forEach(n => {
+        const grd = ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r*3);
+        grd.addColorStop(0,'rgba(255,150,150,0.9)'); grd.addColorStop(1,'rgba(239,68,68,0)');
+        ctx.beginPath(); ctx.arc(n.x,n.y,n.r*3,0,Math.PI*2); ctx.fillStyle=grd; ctx.fill();
+        ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2); ctx.fillStyle='#ef4444'; ctx.fill();
+        n.x += n.vx; n.y += n.vy;
+        if (n.x<0||n.x>canvas.width) n.vx*=-1; if (n.y<0||n.y>canvas.height) n.vy*=-1;
+      });
+      requestAnimationFrame(loop);
+    }
+    loop();
+  </script>
+</body>
+</html>

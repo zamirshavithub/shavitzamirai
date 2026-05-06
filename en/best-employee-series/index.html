@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to Turn Claude Into Your Best Employee — The Full Series | Shavit Zamir</title>
+  <meta name="description" content="The complete series — every episode of How to Turn Claude Into Your Best Employee. From your first role assignment to agent systems that work overnight." />
+  <meta property="og:title" content="The Series: How to Turn Claude Into Your Best Employee" />
+  <meta property="og:description" content="29 episodes. From foundations to advanced agent systems. All in Hebrew with English keywords." />
+  <meta property="og:type" content="website" />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Heebo', sans-serif; background: #f5f5f5; color: #1a1a1a; direction: ltr; line-height: 1.6; }
+
+    nav { background: #0b1a2e; padding: 18px 60px; display: flex; justify-content: space-between; align-items: center; }
+    nav .logo { color: #fff; font-size: 18px; font-weight: 700; text-decoration: none; }
+    nav ul { list-style: none; display: flex; gap: 32px; align-items: center; }
+    nav ul li a { color: #ccd6f6; text-decoration: none; font-size: 15px; font-weight: 400; transition: color 0.2s; }
+    nav ul li a:hover { color: #fff; }
+    .lang-toggle { display: inline-flex; align-items: center; gap: 4px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); color: #fff !important; font-weight: 700 !important; padding: 5px 12px; border-radius: 6px; font-size: 13px !important; letter-spacing: 0.5px; transition: background 0.2s; }
+    .lang-toggle:hover { background: rgba(255,255,255,0.18); color: #fff !important; }
+
+    .hero { background: linear-gradient(135deg, #0b1a2e 0%, #112240 60%, #1a3a6e 100%); padding: 90px 60px 100px; text-align: center; position: relative; overflow: hidden; }
+    #neuralCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+    .hero > * { position: relative; z-index: 1; }
+    .hero .badge { display: inline-block; background: rgba(29,111,245,0.15); border: 1px solid rgba(29,111,245,0.4); color: #63b3ff; padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500; margin-bottom: 24px; }
+    .hero h1 { font-size: 56px; font-weight: 800; color: #fff; line-height: 1.15; margin-bottom: 22px; max-width: 880px; margin-inline: auto; }
+    .hero .lede { font-size: 18px; color: #a8c0e0; line-height: 1.75; max-width: 720px; margin: 0 auto 36px; }
+    .hero-stats { display: flex; justify-content: center; gap: 48px; flex-wrap: wrap; margin-bottom: 40px; }
+    .hero-stats .stat { text-align: center; }
+    .hero-stats .stat .num { display: block; font-size: 36px; font-weight: 800; color: #fff; line-height: 1; }
+    .hero-stats .stat .lbl { display: block; font-size: 13px; color: #6a8caf; margin-top: 6px; letter-spacing: 0.5px; }
+
+    section { padding: 80px 60px; }
+    .section-head { max-width: 760px; margin: 0 auto 56px; text-align: center; }
+    .section-head h2 { font-size: 36px; font-weight: 800; color: #0b1a2e; margin-bottom: 16px; }
+    .section-head p { font-size: 17px; color: #555; line-height: 1.75; }
+
+    .why { background: #fff; }
+    .why-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1080px; margin: 0 auto; }
+    .why-card { background: #f5f7fb; border: 1px solid #e6ecf5; border-radius: 14px; padding: 32px 26px; }
+    .why-card .icon { display: inline-block; width: 48px; height: 48px; border-radius: 12px; background: #1d6ff5; color: #fff; text-align: center; line-height: 48px; font-size: 22px; font-weight: 700; margin-bottom: 16px; }
+    .why-card h3 { font-size: 19px; font-weight: 700; color: #0b1a2e; margin-bottom: 10px; }
+    .why-card p { font-size: 15px; color: #555; line-height: 1.7; }
+
+    .episodes { background: #f5f7fb; }
+    .episodes-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; max-width: 1100px; margin: 0 auto; }
+    .episode { background: #fff; border: 1px solid #e6ecf5; border-radius: 14px; padding: 26px 28px; transition: all 0.2s; display: flex; flex-direction: column; gap: 10px; }
+    .episode:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(11,26,46,0.08); border-color: #1d6ff5; }
+    .episode-num { display: inline-block; background: #0b1a2e; color: #fff; font-size: 13px; font-weight: 700; padding: 5px 12px; border-radius: 6px; letter-spacing: 0.5px; align-self: flex-start; }
+    .episode h3 { font-size: 19px; font-weight: 700; color: #0b1a2e; line-height: 1.35; }
+    .episode .hook { font-size: 14px; color: #555; line-height: 1.7; flex: 1; }
+    .episode .links { display: flex; gap: 8px; margin-top: 6px; padding-top: 12px; border-top: 1px solid #f0f3f8; flex-wrap: wrap; }
+    .play-btn { display: inline-flex; align-items: center; gap: 6px; background: #1d6ff5; color: #fff !important; padding: 7px 14px; border-radius: 8px; font-size: 13px; font-weight: 700; cursor: pointer; border: none; font-family: 'Heebo', sans-serif; transition: background 0.15s; }
+    .play-btn:hover { background: #1558d0; }
+    .play-btn .triangle { display: inline-block; width: 0; height: 0; border-top: 5px solid transparent; border-bottom: 5px solid transparent; border-left: 7px solid #fff; }
+    .external-link { display: inline-flex; align-items: center; gap: 4px; padding: 7px 10px; font-size: 13px; color: #5a6b85 !important; font-weight: 500; text-decoration: none; }
+    .external-link:hover { color: #1d6ff5 !important; }
+
+    .video-modal { position: fixed; inset: 0; background: rgba(11, 26, 46, 0.92); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 20px; backdrop-filter: blur(6px); }
+    .video-modal.open { display: flex; }
+    .video-modal-content { position: relative; width: 100%; max-width: 380px; aspect-ratio: 9 / 16; max-height: 90vh; background: #000; border-radius: 14px; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.5); }
+    .video-modal-content iframe { width: 100%; height: 100%; border: 0; }
+    .video-modal-close { position: absolute; top: -44px; right: 0; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.25); color: #fff; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; font-size: 20px; line-height: 1; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
+    .video-modal-close:hover { background: rgba(255,255,255,0.22); }
+    .video-modal-caption { position: absolute; top: -38px; left: 0; color: #a8c0e0; font-size: 13px; font-weight: 600; }
+
+    .episodes-note { max-width: 760px; margin: 36px auto 0; background: #fff; border: 1px solid #e6ecf5; border-left: 4px solid #1d6ff5; border-radius: 10px; padding: 20px 24px; font-size: 15px; color: #555; line-height: 1.7; }
+    .episodes-note strong { color: #0b1a2e; }
+
+    .follow { background: linear-gradient(135deg, #0b1a2e 0%, #1a3a6e 100%); color: #fff; text-align: center; }
+    .follow h2 { color: #fff; font-size: 32px; font-weight: 800; margin-bottom: 14px; }
+    .follow p { color: #a8c0e0; font-size: 16px; margin-bottom: 28px; }
+    .follow .social-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .social-btn-large { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 14px 28px; border-radius: 10px; font-size: 15px; font-weight: 600; font-family: 'Heebo', sans-serif; text-decoration: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 10px; }
+    .social-btn-large:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
+
+    .opt-in { background: #fff; padding-bottom: 90px; }
+    .opt-in-card { max-width: 620px; margin: 0 auto; background: #f5f7fb; border: 1px solid #e6ecf5; border-radius: 16px; padding: 40px 36px; text-align: center; }
+    .opt-in-card h3 { font-size: 24px; font-weight: 800; color: #0b1a2e; margin-bottom: 12px; }
+    .opt-in-card p { font-size: 15px; color: #555; line-height: 1.7; margin-bottom: 22px; }
+    .opt-in-form { display: flex; flex-direction: column; gap: 10px; max-width: 460px; margin: 0 auto; }
+    .opt-in-form .row { display: flex; gap: 10px; }
+    .opt-in-form .row > * { flex: 1; }
+    .opt-in-form input { padding: 12px 16px; border-radius: 8px; border: 1.5px solid #d0d8e6; background: #fff; font-size: 15px; font-family: 'Heebo', sans-serif; outline: none; transition: border-color 0.2s; width: 100%; }
+    .opt-in-form input:focus { border-color: #1d6ff5; }
+    .opt-in-form button { background: #1d6ff5; color: #fff; border: none; padding: 13px 28px; border-radius: 8px; font-size: 15px; font-weight: 700; font-family: 'Heebo', sans-serif; cursor: pointer; margin-top: 4px; }
+    .opt-in-form button:hover { background: #1558d0; }
+    .opt-in-card .privacy { font-size: 12px; color: #888; margin-top: 14px; }
+
+    footer { background: #0b1a2e; padding: 28px 60px; text-align: center; color: #6a8caf; font-size: 14px; }
+    footer a { color: #6a8caf; text-decoration: none; }
+    footer a:hover { color: #fff; }
+
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; }
+      nav ul { gap: 14px; }
+      .hero { padding: 60px 20px 70px; }
+      .hero h1 { font-size: 32px; }
+      .hero .lede { font-size: 15px; }
+      .hero-stats { gap: 28px; }
+      .hero-stats .stat .num { font-size: 28px; }
+      section { padding: 50px 20px; }
+      .section-head h2 { font-size: 26px; }
+      .why-grid, .episodes-grid { grid-template-columns: 1fr; }
+      .opt-in-form .row { flex-direction: column; }
+      footer { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="/en/" class="logo">Shavit Zamir</a>
+    <ul>
+      <li><a href="/en/#about">About</a></li>
+      <li><a href="/en/#services">Services</a></li>
+      <li><a href="/en/#free">Free Content</a></li>
+      <li><a href="/en/#contact">Contact</a></li>
+      <li><a href="/best-employee-series/" class="lang-toggle" title="עברית">🇮🇱 HE</a></li>
+    </ul>
+  </nav>
+
+  <section class="hero">
+    <canvas id="neuralCanvas"></canvas>
+    <span class="badge">SERIES · 29 EPISODES</span>
+    <h1>How to turn Claude<br/>into your best employee</h1>
+    <p class="lede">
+      The complete series — from the foundations ("give Claude a role") to agent systems that run overnight on their own. Each episode is 60 seconds, but each one delivers a single new capability. Watch from the start — and Claude turns from a chatbot into an employee that does half the job. Episodes are in Hebrew; titles and hooks here are in English.
+    </p>
+    <div class="hero-stats">
+      <div class="stat"><span class="num">29</span><span class="lbl">EPISODES</span></div>
+      <div class="stat"><span class="num">60s</span><span class="lbl">EACH</span></div>
+      <div class="stat"><span class="num">∞</span><span class="lbl">NEW SKILLS</span></div>
+    </div>
+  </section>
+
+  <section class="why">
+    <div class="section-head">
+      <h2>What makes this series different</h2>
+      <p>It's not "5 prompts that will change your life." It's a structured curriculum — every episode delivers one new capability, each builds on the last.</p>
+    </div>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="icon">1</div>
+        <h3>Structured curriculum</h3>
+        <p>The order matters. Episode 1 sets the foundation — Episode 29 closes a 6-month story. Watching from the start gets you the full result.</p>
+      </div>
+      <div class="why-card">
+        <div class="icon">2</div>
+        <h3>Practical, not theoretical</h3>
+        <p>Every episode shows real screen footage and a working prompt. Concrete numbers, named tools — never "AI is amazing."</p>
+      </div>
+      <div class="why-card">
+        <div class="icon">3</div>
+        <h3>Updates with the platform</h3>
+        <p>When Anthropic releases something new — Computer Use, Skills, MCP, Routines — there's an episode about it within 48 hours.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="episodes">
+    <div class="section-head">
+      <h2>All episodes</h2>
+      <p>29 episodes published so far. Click "Play video" to watch in-page, or "Open in TikTok" for the full TikTok experience.</p>
+    </div>
+    <div class="episodes-grid">
+
+      <div class="episode">
+        <span class="episode-num">EP 1</span>
+        <h3>Most people miss 80% of Claude</h3>
+        <p class="hook">Most people miss 80% of what Claude can do because nobody taught them how to talk to it. One small mistake is the difference between a generic answer and output that&#x27;s ready to ship.</p>
+        <div class="links"><button class="play-btn" data-video-id="7618565429748976916" data-label="EP 1"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7618565429748976916" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 2</span>
+        <h3>Claude is not just another ChatGPT</h3>
+        <p class="hook">Claude isn&#x27;t just another chatbot — it writes whole documents, reads your files, and works like a real employee. Three differences that change your workflow.</p>
+        <div class="links"><button class="play-btn" data-video-id="7618910896873590036" data-label="EP 2"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7618910896873590036" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 3</span>
+        <h3>Migrate everything from ChatGPT to Claude</h3>
+        <p class="hook">How to take the chats, docs and insights you&#x27;ve built up in ChatGPT — and turn them into a smart base Claude can use, so it stops guessing and starts working like someone who knows your business.</p>
+        <div class="links"><button class="play-btn" data-video-id="7618998253194956052" data-label="EP 3"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7618998253194956052" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 4</span>
+        <h3>Projects in Claude — the feature that changes everything</h3>
+        <p class="hook">One feature that turns Claude from a chatbot starting from scratch every time into an employee that knows you and your business. Three steps and you&#x27;re set.</p>
+        <div class="links"><button class="play-btn" data-video-id="7619359869866642708" data-label="EP 4"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7619359869866642708" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 5</span>
+        <h3>Chief of Staff — the prompt everyone&#x27;s talking about</h3>
+        <p class="hook">One prompt that turns Claude into a task manager working for you every day — drafts emails, prepares proposals, runs your day.</p>
+        <div class="links"><button class="play-btn" data-video-id="7620020380790459668" data-label="EP 5"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7620020380790459668" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 6</span>
+        <h3>3 instructions you must remember</h3>
+        <p class="hook">Three instructions you should ask Claude for in every conversation — and the output level jumps.</p>
+        <div class="links"><button class="play-btn" data-video-id="7621180927435099412" data-label="EP 6"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7621180927435099412" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 7</span>
+        <h3>MCP — give Claude access to your tools</h3>
+        <p class="hook">Until now, Claude only worked with what you fed it. Now it can access your tools by itself — that changes the whole game.</p>
+        <div class="links"><button class="play-btn" data-video-id="7621570288655846677" data-label="EP 7"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7621570288655846677" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 8</span>
+        <h3>Connecting Gmail MCP live</h3>
+        <p class="hook">5 steps to connect Gmail to Claude — and then Claude reads your emails for you.</p>
+        <div class="links"><button class="play-btn" data-video-id="7621908263839223060" data-label="EP 8"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7621908263839223060" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 9</span>
+        <h3>Automation — Claude works without you every day</h3>
+        <p class="hook">There are tasks you do manually every day. This video shows how to hand them off to Claude once — and it keeps going on its own.</p>
+        <div class="links"><button class="play-btn" data-video-id="7622325530829851924" data-label="EP 9"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7622325530829851924" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 10</span>
+        <h3>Stop using Claude like Google</h3>
+        <p class="hook">Most people use Claude AI like an expensive Google — ask a question, get an answer. Here&#x27;s how to turn it into an employee.</p>
+        <div class="links"><button class="play-btn" data-video-id="7622656223254416661" data-label="EP 10"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7622656223254416661" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 11</span>
+        <h3>Vibe coding — an app in 5 minutes without code</h3>
+        <p class="hook">I built a customer-management tool in 5 minutes. Without writing a single line of code. Here&#x27;s how you do the same.</p>
+        <div class="links"><button class="play-btn" data-video-id="7623057669271719189" data-label="EP 11"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7623057669271719189" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 12</span>
+        <h3>Claude remote — control it from your phone</h3>
+        <p class="hook">I sent Claude an instruction from my phone during a meeting. I came home to finished work.</p>
+        <div class="links"><button class="play-btn" data-video-id="7623448535710698773" data-label="EP 12"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7623448535710698773" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 13</span>
+        <h3>Reverse prompting — ask Claude for the instructions</h3>
+        <p class="hook">The biggest secret to writing good instructions for Claude — don&#x27;t write them at all. Give it an example and let it write its own.</p>
+        <div class="links"><button class="play-btn" data-video-id="7624202357408091413" data-label="EP 13"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7624202357408091413" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 14</span>
+        <h3>Auto Mode — Claude runs alone with guardrails</h3>
+        <p class="hook">Most people use Claude manually. Ask, receive, ask again. With Auto Mode it runs by itself.</p>
+        <div class="links"><button class="play-btn" data-video-id="7624941817464655125" data-label="EP 14"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7624941817464655125" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 15</span>
+        <h3>5 things you didn&#x27;t know Claude does</h3>
+        <p class="hook">Five things Claude can do that most people don&#x27;t know about. Each one changes your workflow.</p>
+        <div class="links"><button class="play-btn" data-video-id="7625265193961966868" data-label="EP 15"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7625265193961966868" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 16</span>
+        <h3>Prompt chaining — task chains</h3>
+        <p class="hook">Most people send Claude one prompt and expect magic. The advanced ones send a chain — and the output is completely different.</p>
+        <div class="links"><button class="play-btn" data-video-id="7626380491058564372" data-label="EP 16"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7626380491058564372" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 17</span>
+        <h3>Remotion — URL becomes a launch video</h3>
+        <p class="hook">Remotion — the tool that changes the rules of AI video creation. I gave Claude a website URL. I got a finished video.</p>
+        <div class="links"><button class="play-btn" data-video-id="7626783214765362453" data-label="EP 17"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7626783214765362453" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 18</span>
+        <h3>Insights — a report on your Claude usage</h3>
+        <p class="hook">How to use the Insights command in Claude to get a detailed report on your usage — and what it reveals about your workflow.</p>
+        <div class="links"><button class="play-btn" data-video-id="7627148689810951445" data-label="EP 18"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7627148689810951445" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 19</span>
+        <h3>When Claude Code starts running — and does damage</h3>
+        <p class="hook">The problem when Claude Code starts running on a task without understanding it correctly, ends up changing files and deleting things in the wrong direction. Here&#x27;s how to prevent it.</p>
+        <div class="links"><button class="play-btn" data-video-id="7628178881140395285" data-label="EP 19"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7628178881140395285" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 20</span>
+        <h3>Computer Use — Claude sees and uses your computer</h3>
+        <p class="hook">Claude&#x27;s new feature — Computer Use — lets it see your screen and operate software like a regular person.</p>
+        <div class="links"><button class="play-btn" data-video-id="7628999240089472276" data-label="EP 20"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7628999240089472276" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 21</span>
+        <h3>Advanced search engine or working agent?</h3>
+        <p class="hook">The huge difference between using Claude as an advanced search engine vs. using it as a working agent. People miss this distinction.</p>
+        <div class="links"><button class="play-btn" data-video-id="7629304649668988180" data-label="EP 21"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7629304649668988180" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 22</span>
+        <h3>Claude for Word — the new Word add-in</h3>
+        <p class="hook">Claude for Word, Anthropic&#x27;s new add-in just released in beta. Here&#x27;s how it changes work in documents.</p>
+        <div class="links"><button class="play-btn" data-video-id="7629755889330752789" data-label="EP 22"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7629755889330752789" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 23</span>
+        <h3>Routines — automation in Claude Code</h3>
+        <p class="hook">Routines — a new Claude Code feature that lets you run code automatically in Anthropic&#x27;s cloud without needing a server or cron job.</p>
+        <div class="links"><button class="play-btn" data-video-id="7630169864920976660" data-label="EP 23"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7630169864920976660" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 24</span>
+        <h3>Skills — how to teach Claude a skill</h3>
+        <p class="hook">A Skill is knowledge. Here&#x27;s how to teach Claude a new skill once — and have it activate that skill on its own whenever it&#x27;s needed.</p>
+        <div class="links"><button class="play-btn" data-video-id="7630471301819567381" data-label="EP 24"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7630471301819567381" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 25</span>
+        <h3>Claude Design — Anthropic&#x27;s Figma killer</h3>
+        <p class="hook">Anthropic launched a tool a few days ago that kills Figma — and you don&#x27;t have to be a designer to use it. Type a sentence, get an interactive prototype.</p>
+        <div class="links"><button class="play-btn" data-video-id="7630839129965726996" data-label="EP 25"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7630839129965726996" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 26</span>
+        <h3>5 verified plugins worth installing</h3>
+        <p class="hook">5 Anthropic-verified plugins we installed in Claude that turned our team from one person into five.</p>
+        <div class="links"><button class="play-btn" data-video-id="7631590717101509908" data-label="EP 26"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7631590717101509908" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 27</span>
+        <h3>Dispatch vs. Remote Control — the critical difference</h3>
+        <p class="hook">I sent Claude a message from the bus. By the time I got home — this video was already made. The difference between Dispatch and Remote Control, plus a security warning nobody talks about.</p>
+        <div class="links"><button class="play-btn" data-video-id="7632772232133004565" data-label="EP 27"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7632772232133004565" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 28</span>
+        <h3>A self-updating dashboard — sidebar artifact</h3>
+        <p class="hook">I stopped asking Claude for weekly reports — I built a dashboard that updates itself. One artifact sits in the sidebar and pulls fresh data every time it opens.</p>
+        <div class="links"><button class="play-btn" data-video-id="7633000057536646420" data-label="EP 28"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7633000057536646420" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+      <div class="episode">
+        <span class="episode-num">EP 29</span>
+        <h3>Episode 29 in the series</h3>
+        <p class="hook">Another episode in the series — watch on TikTok for the full details.</p>
+        <div class="links"><button class="play-btn" data-video-id="7635286710175206677" data-label="EP 29"><span class="triangle"></span> Play video</button><a href="https://www.tiktok.com/@shavitzamir/video/7635286710175206677" target="_blank" rel="noopener" class="external-link">Open in TikTok ↗</a></div>
+      </div>
+
+    </div>
+
+    <div class="episodes-note">
+      <strong>Founder's note:</strong> the series continues — a new episode every week. This page updates manually, so if you're looking for an episode that hasn't appeared here yet, head straight to the Instagram or TikTok profile. All episodes are saved there in order.
+    </div>
+  </section>
+
+  <section class="follow">
+    <h2>Don't miss the next episode</h2>
+    <p>The series continues. Follow on Instagram or TikTok = a new episode every week, straight to you.</p>
+    <div class="social-buttons">
+      <a href="https://www.instagram.com/shavitzamirai" target="_blank" class="social-btn-large">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
+        Instagram
+      </a>
+      <a href="https://www.tiktok.com/@shavitzamir" target="_blank" class="social-btn-large">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+        TikTok
+      </a>
+    </div>
+  </section>
+
+  <section class="opt-in">
+    <div class="opt-in-card">
+      <h3>Want a weekly summary of the series?</h3>
+      <p>I send one a week — the new episode + a template/prompt from the series. Unsubscribe anytime.</p>
+      <form class="opt-in-form" action="https://formsubmit.co/zamir.shavit@gmail.com" method="POST">
+        <input type="hidden" name="_subject" value="Subscribe — best-employee series (EN)" />
+        <input type="hidden" name="_captcha" value="false" />
+        <input type="hidden" name="_next" value="https://shavitzamirai.com/en/best-employee-series/?subscribed=true" />
+        <input type="hidden" name="source" value="best-employee-series-en-page" />
+        <input type="email" name="email" placeholder="Your email *" required />
+        <div class="row">
+          <input type="text" name="name" placeholder="Name (optional)" />
+          <input type="tel" name="phone" placeholder="Phone (optional)" />
+        </div>
+        <input type="text" name="business_or_role" placeholder="Business or role (optional)" />
+        <button type="submit">Count me in</button>
+      </form>
+      <p class="privacy">Your details are never shared.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p>© 2026 Shavit Zamir · <a href="/en/">Home</a> · <a href="/en/30-reels/">30 Reels in 4 hours</a> · <a href="/en/secure-prompt/">The Secure Prompt</a> · <a href="mailto:zamir.shavit@gmail.com">zamir.shavit@gmail.com</a></p>
+  </footer>
+
+  <div class="video-modal" id="videoModal" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="video-modal-content">
+      <span class="video-modal-caption" id="videoModalCaption"></span>
+      <button class="video-modal-close" id="videoModalClose" aria-label="Close">×</button>
+      <iframe id="videoModalFrame" src="" allow="autoplay; fullscreen" allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      const modal = document.getElementById('videoModal');
+      const frame = document.getElementById('videoModalFrame');
+      const caption = document.getElementById('videoModalCaption');
+      const closeBtn = document.getElementById('videoModalClose');
+
+      function openVideo(videoId, label) {
+        frame.src = 'https://www.tiktok.com/embed/v2/' + videoId + '?autoplay=1';
+        caption.textContent = label || '';
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeVideo() {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        frame.src = '';
+        document.body.style.overflow = '';
+      }
+
+      document.querySelectorAll('.play-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+          e.preventDefault();
+          openVideo(btn.dataset.videoId, btn.dataset.label || '');
+        });
+      });
+      closeBtn.addEventListener('click', closeVideo);
+      modal.addEventListener('click', e => { if (e.target === modal) closeVideo(); });
+      document.addEventListener('keydown', e => { if (e.key === 'Escape' && modal.classList.contains('open')) closeVideo(); });
+    })();
+
+    if (new URLSearchParams(window.location.search).get('subscribed') === 'true') {
+      const card = document.querySelector('.opt-in-card');
+      if (card) card.innerHTML = '<h3 style="color:#22c55e;">✓ You\'re in</h3><p>The first weekly drop arrives within a week. Until then — follow on Instagram or TikTok to catch episodes live.</p>';
+    }
+
+    const canvas = document.getElementById('neuralCanvas');
+    const ctx = canvas.getContext('2d');
+    function resize() { canvas.width = canvas.parentElement.offsetWidth; canvas.height = canvas.parentElement.offsetHeight; }
+    resize();
+    window.addEventListener('resize', resize);
+    function makeNodes() { return Array.from({length:60}, () => ({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-0.5)*0.5,vy:(Math.random()-0.5)*0.5,r:Math.random()*1.8+0.8})); }
+    let nodes = makeNodes();
+    window.addEventListener('resize', () => { nodes = makeNodes(); });
+    function loop() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      for (let i=0;i<nodes.length;i++) for (let j=i+1;j<nodes.length;j++) {
+        const dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y, d=Math.sqrt(dx*dx+dy*dy);
+        if (d<130) { ctx.strokeStyle=`rgba(99,179,255,${(1-d/130)*0.35})`; ctx.lineWidth=0.6; ctx.beginPath(); ctx.moveTo(nodes[i].x,nodes[i].y); ctx.lineTo(nodes[j].x,nodes[j].y); ctx.stroke(); }
+      }
+      nodes.forEach(n => {
+        const grd = ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r*3);
+        grd.addColorStop(0,'rgba(99,179,255,0.9)'); grd.addColorStop(1,'rgba(29,111,245,0)');
+        ctx.beginPath(); ctx.arc(n.x,n.y,n.r*3,0,Math.PI*2); ctx.fillStyle=grd; ctx.fill();
+        ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2); ctx.fillStyle='#63b3ff'; ctx.fill();
+        n.x += n.vx; n.y += n.vy;
+        if (n.x<0||n.x>canvas.width) n.vx*=-1; if (n.y<0||n.y>canvas.height) n.vy*=-1;
+      });
+      requestAnimationFrame(loop);
+    }
+    loop();
+  </script>
+</body>
+</html>

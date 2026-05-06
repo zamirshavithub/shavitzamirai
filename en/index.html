@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shavit Zamir | AI Expert</title>
+  <meta name="description" content="I teach people and companies to use AI to work smarter — entrepreneur, cybersecurity expert, and CS Master's student at Tel Aviv University." />
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Heebo', sans-serif;
+      background: #f5f5f5;
+      color: #1a1a1a;
+      direction: ltr;
+      line-height: 1.6;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      background: #0b1a2e;
+      padding: 18px 60px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav .logo { color: #fff; font-size: 18px; font-weight: 700; }
+    nav ul { list-style: none; display: flex; gap: 32px; align-items: center; }
+    nav ul li a { color: #ccd6f6; text-decoration: none; font-size: 15px; font-weight: 400; transition: color 0.2s; }
+    nav ul li a:hover { color: #fff; }
+    .lang-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: #fff !important;
+      font-weight: 700 !important;
+      padding: 5px 12px;
+      border-radius: 6px;
+      font-size: 13px !important;
+      letter-spacing: 0.5px;
+      transition: background 0.2s;
+    }
+    .lang-toggle:hover { background: rgba(255,255,255,0.18); color: #fff !important; }
+
+    /* ─── HERO ─── */
+    .hero {
+      background: linear-gradient(135deg, #0b1a2e 0%, #112240 60%, #1a3a6e 100%);
+      padding: 90px 60px 100px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    #neuralCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+    .hero-text { position: relative; z-index: 1; }
+    .hero h1 { font-size: 56px; font-weight: 800; color: #fff; line-height: 1.15; margin-bottom: 22px; max-width: 900px; margin-inline: auto; }
+    .hero p { font-size: 18px; color: #a8c0e0; line-height: 1.75; max-width: 720px; margin: 0 auto 36px; }
+    .hero-buttons { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-primary { background: #1d6ff5; color: #fff; border: none; padding: 12px 30px; border-radius: 6px; font-size: 16px; font-weight: 600; font-family: 'Heebo', sans-serif; cursor: pointer; transition: background 0.2s; text-decoration: none; display: inline-block; }
+    .btn-primary:hover { background: #1558d0; }
+
+    /* ─── STATS BAR ─── */
+    .stats-bar { background: #fff; padding: 40px 60px; display: flex; justify-content: center; gap: 0; border-bottom: 1px solid #eee; }
+    .stat-item { flex: 1; max-width: 220px; display: flex; flex-direction: column; align-items: center; text-align: center; gap: 12px; padding: 0 20px; border-right: 1px solid #eee; }
+    .stat-item:last-child { border-right: none; }
+    .stat-icon { width: 48px; height: 48px; background: #eef3ff; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .stat-item p { font-size: 13px; font-weight: 500; color: #444; line-height: 1.4; }
+
+    /* ─── ABOUT ─── */
+    .about { background: #fff; padding: 70px 60px 90px; max-width: 780px; margin: 0 auto; text-align: center; }
+    .about h2 { font-size: 34px; font-weight: 800; color: #0b1a2e; margin-bottom: 24px; }
+    .about p { font-size: 16px; line-height: 1.85; color: #444; margin-bottom: 28px; }
+    .social-links { display: flex; gap: 14px; justify-content: center; margin-top: 8px; }
+    .social-btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 22px; border: 1.5px solid #1d6ff5; border-radius: 6px; color: #1d6ff5; font-size: 15px; font-weight: 600; text-decoration: none; transition: background 0.2s, color 0.2s; }
+    .social-btn:hover { background: #1d6ff5; color: #fff; }
+
+    /* ─── SERVICES ─── */
+    .services { background: #f5f7fb; padding: 70px 60px; text-align: center; }
+    .services h2 { font-size: 34px; font-weight: 800; color: #0b1a2e; margin-bottom: 48px; }
+    .services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1000px; margin: 0 auto; }
+    .service-card { background: #fff; border-radius: 12px; padding: 32px 24px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,0.06); transition: transform 0.2s, box-shadow 0.2s; }
+    .service-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.1); }
+    .service-card .icon { font-size: 36px; margin-bottom: 16px; }
+    .service-card h3 { font-size: 18px; font-weight: 700; color: #0b1a2e; margin-bottom: 10px; }
+    .service-card p { font-size: 14px; color: #666; line-height: 1.7; }
+
+    /* ─── VIDEO SERIES ─── */
+    .video-series { background: linear-gradient(180deg, #f5f7fb 0%, #ebf1fb 100%); padding: 70px 60px; text-align: center; }
+    .video-series h2 { font-size: 34px; font-weight: 800; color: #0b1a2e; margin-bottom: 14px; }
+    .video-series .series-lede { font-size: 16px; color: #555; max-width: 600px; margin: 0 auto 48px; line-height: 1.7; }
+    .series-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; max-width: 1000px; margin: 0 auto; }
+    .series-card { background: #fff; border: 1px solid #d6e0f0; border-radius: 14px; padding: 28px 24px; text-align: left; transition: all 0.2s; text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 12px; position: relative; }
+    .series-card:hover { transform: translateY(-4px); box-shadow: 0 10px 28px rgba(11,26,46,0.12); border-color: #1d6ff5; }
+    .series-card .episodes-badge { position: absolute; top: 16px; right: 16px; background: #0b1a2e; color: #fff; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 12px; letter-spacing: 0.5px; }
+    .series-card .res-meta { font-size: 12px; color: #1d6ff5; font-weight: 600; letter-spacing: 0.8px; }
+    .series-card h3 { font-size: 21px; font-weight: 800; color: #0b1a2e; line-height: 1.3; }
+    .series-card p { font-size: 14px; color: #555; line-height: 1.7; flex: 1; }
+    .series-card .arrow { font-size: 14px; font-weight: 600; color: #1d6ff5; margin-top: 4px; }
+    .series-card.placeholder { background: #f5f7fb; border: 1px dashed #c7d2e0; opacity: 0.7; cursor: default; }
+    .series-card.placeholder:hover { transform: none; box-shadow: none; border-color: #c7d2e0; }
+    .series-card.placeholder .episodes-badge { background: #888; }
+    .series-card.placeholder .res-meta { color: #888; }
+    .series-card.placeholder .arrow { color: #888; }
+
+    /* ─── FREE RESOURCES ─── */
+    .free-resources { background: #fff; padding: 70px 60px; text-align: center; }
+    .free-resources h2 { font-size: 34px; font-weight: 800; color: #0b1a2e; margin-bottom: 14px; }
+    .free-resources .free-lede { font-size: 16px; color: #666; max-width: 580px; margin: 0 auto 12px; line-height: 1.7; }
+    .free-resources .lang-note { display: inline-block; background: #fff7e6; border: 1px solid #fde2a3; color: #a87f1f; font-size: 13px; padding: 8px 16px; border-radius: 8px; margin: 0 auto 36px; }
+    .resources-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; max-width: 1000px; margin: 0 auto; }
+    .resource-card { background: #f5f7fb; border: 1px solid #e6ecf5; border-radius: 14px; padding: 28px 24px; text-align: left; transition: all 0.2s; text-decoration: none; color: inherit; display: flex; flex-direction: column; gap: 12px; position: relative; }
+    .resource-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(11,26,46,0.1); border-color: #1d6ff5; }
+    .resource-card .free-badge { position: absolute; top: 16px; right: 16px; background: #1d6ff5; color: #fff; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 12px; letter-spacing: 0.5px; }
+    .resource-card .res-meta { font-size: 12px; color: #1d6ff5; font-weight: 600; letter-spacing: 0.8px; }
+    .resource-card h3 { font-size: 19px; font-weight: 700; color: #0b1a2e; line-height: 1.35; }
+    .resource-card p { font-size: 14px; color: #555; line-height: 1.7; flex: 1; }
+    .resource-card .arrow { font-size: 14px; font-weight: 600; color: #1d6ff5; margin-top: 4px; }
+
+    /* ─── CTA ─── */
+    .cta { background: linear-gradient(135deg, #0b1a2e 0%, #1a3a6e 100%); padding: 80px 60px; text-align: center; color: #fff; }
+    .cta h2 { font-size: 34px; font-weight: 800; margin-bottom: 14px; }
+    .cta p { font-size: 16px; color: #a8c0e0; margin-bottom: 36px; }
+    .contact-form { max-width: 540px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+    .contact-form .form-row { display: flex; gap: 12px; }
+    .contact-form .form-row > * { flex: 1; }
+    .contact-form input, .contact-form textarea { padding: 13px 16px; border-radius: 6px; border: 1.5px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: #fff; font-size: 15px; font-family: 'Heebo', sans-serif; outline: none; transition: border-color 0.2s; }
+    .contact-form input::placeholder, .contact-form textarea::placeholder { color: rgba(255,255,255,0.5); }
+    .contact-form input:focus, .contact-form textarea:focus { border-color: #1d6ff5; }
+    .contact-form button { background: #1d6ff5; color: #fff; border: none; padding: 14px; border-radius: 6px; font-size: 16px; font-weight: 700; font-family: 'Heebo', sans-serif; cursor: pointer; margin-top: 6px; }
+    .contact-form button:hover { background: #1558d0; }
+
+    footer { background: #0b1a2e; padding: 28px 60px; text-align: center; color: #6a8caf; font-size: 14px; }
+    footer a { color: #6a8caf; text-decoration: none; }
+    footer a:hover { color: #fff; }
+
+    @media (max-width: 768px) {
+      nav { padding: 16px 20px; flex-wrap: wrap; gap: 8px; }
+      nav ul { gap: 12px; }
+      .hero { padding: 60px 20px 70px; }
+      .hero h1 { font-size: 32px; }
+      .hero p { font-size: 15px; }
+      .stats-bar { flex-wrap: wrap; gap: 24px; padding: 30px 20px; }
+      .stat-item { max-width: 45%; border-right: none; }
+      .about { padding: 50px 20px; }
+      .services { padding: 50px 20px; }
+      .services-grid { grid-template-columns: 1fr; }
+      .video-series { padding: 50px 20px; }
+      .series-grid { grid-template-columns: 1fr; }
+      .free-resources { padding: 50px 20px; }
+      .resources-grid { grid-template-columns: 1fr; }
+      .cta { padding: 50px 20px; }
+      .contact-form .form-row { flex-direction: column; }
+      footer { padding: 24px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">Shavit Zamir</div>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#series">Series</a></li>
+      <li><a href="#free">Free Content</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="/" class="lang-toggle" title="עברית">🇮🇱 HE</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <canvas id="neuralCanvas"></canvas>
+    <div class="hero-text">
+      <h1>Building and Learning<br/>at the AI Frontier</h1>
+      <p>I teach people and companies to use AI to work smarter — entrepreneur, cybersecurity expert, and CS Master's student at Tel Aviv University.</p>
+      <div class="hero-buttons">
+        <a href="#contact" class="btn-primary">Let's talk</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS BAR -->
+  <section class="stats-bar">
+    <div class="stat-item">
+      <div class="stat-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1d6ff5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      </div>
+      <p>Data Engineering, Technion</p>
+    </div>
+    <div class="stat-item">
+      <div class="stat-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1d6ff5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+      </div>
+      <p>CS Master's — Tel Aviv University</p>
+    </div>
+    <div class="stat-item">
+      <div class="stat-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1d6ff5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M9 8l2 2 4-4"/></svg>
+      </div>
+      <p>AI &amp; Cybersecurity expert</p>
+    </div>
+    <div class="stat-item">
+      <div class="stat-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#1d6ff5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      </div>
+      <p>AI startup founder</p>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <h2>About me</h2>
+    <p>
+      I'm Shavit Zamir — an AI and cybersecurity expert. Data Engineering graduate from the Technion, CS Master's student at Tel Aviv University, and an AI startup founder. I help people and companies turn AI into a real working tool — not theory, just what works in practice.
+    </p>
+    <div class="social-links">
+      <a href="https://www.instagram.com/shavitzamirai" target="_blank" class="social-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/></svg>
+        Instagram
+      </a>
+      <a href="https://www.tiktok.com/@shavitzamir" target="_blank" class="social-btn">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+        TikTok
+      </a>
+    </div>
+  </section>
+
+  <!-- SERVICES -->
+  <section class="services" id="services">
+    <h2>What I offer</h2>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#1d6ff5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        </div>
+        <h3>AI Courses</h3>
+        <p>Practical AI courses — from foundations to professional level.</p>
+      </div>
+      <div class="service-card">
+        <div class="icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#1d6ff5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+        </div>
+        <h3>Corporate Training</h3>
+        <p>Train teams to use AI and improve work efficiency in their daily workflow.</p>
+      </div>
+      <div class="service-card">
+        <div class="icon">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#1d6ff5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <h3>Strategic Consulting</h3>
+        <p>Consulting for companies and startups on integrating AI into business processes.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- VIDEO SERIES -->
+  <section class="video-series" id="series">
+    <h2>Video series</h2>
+    <p class="series-lede">Structured content series in Hebrew — deep guides spanning dozens of episodes. Each episode stands on its own, but the series tells a complete story.</p>
+    <div class="series-grid">
+      <a href="/en/best-employee-series/" class="series-card">
+        <span class="episodes-badge">29 episodes</span>
+        <span class="res-meta">SERIES · CLAUDE · 60s PER EPISODE</span>
+        <h3>How to turn Claude into your best employee</h3>
+        <p>The complete series — from "give Claude a role" to agent systems that work alone overnight. Watching from the start turns Claude from a chatbot into an employee that does half the work. (Hebrew with English keywords.)</p>
+        <span class="arrow">All episodes →</span>
+      </a>
+      <div class="series-card placeholder">
+        <span class="episodes-badge">Coming soon</span>
+        <span class="res-meta">NEW SERIES IN PRODUCTION</span>
+        <h3>New series in the works</h3>
+        <p>Another series on the way — subscribe at the bottom of the page to get notified the moment it drops.</p>
+        <span class="arrow">Coming soon</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FREE RESOURCES -->
+  <section class="free-resources" id="free">
+    <h2>Free content</h2>
+    <p class="free-lede">Templates, prompts and workflows I use myself. Everything open, everything free.</p>
+    <div class="resources-grid">
+      <a href="/en/secure-prompt/" class="resource-card">
+        <span class="free-badge">FREE</span>
+        <span class="res-meta">PROMPT · SECURITY</span>
+        <h3>The Secure Prompt</h3>
+        <p>3 prompts that prevent the 10 most common vulnerabilities in AI-written code — XSS, SQL injection, token leaks and more.</p>
+        <span class="arrow">Open the prompt →</span>
+      </a>
+      <a href="/en/chief-of-staff/" class="resource-card">
+        <span class="free-badge">FREE</span>
+        <span class="res-meta">PROMPT · OPS MANAGEMENT</span>
+        <h3>Chief of Staff — Claude runs your day</h3>
+        <p>One Project Instructions prompt that turns Claude into a task manager, drafts emails, and prepares proposals. Replaces a personal assistant.</p>
+        <span class="arrow">Open the prompt →</span>
+      </a>
+      <a href="/en/contract/" class="resource-card">
+        <span class="free-badge">FREE</span>
+        <span class="res-meta">PROMPT · BRAND VOICE</span>
+        <h3>A work contract for Claude</h3>
+        <p>A System Prompt that tells Claude your style, your audience, and your tone — once. After that every output sounds like you.</p>
+        <span class="arrow">Open the template →</span>
+      </a>
+      <a href="/en/remotion/" class="resource-card">
+        <span class="free-badge">FREE</span>
+        <span class="res-meta">PROMPT + SKILL · VIDEO</span>
+        <h3>Remotion — URL to launch video</h3>
+        <p>Give Claude a website URL, get back a 25-second launch video with your logo, brand colors and product images. Automated.</p>
+        <span class="arrow">Open the prompt →</span>
+      </a>
+      <a href="/en/agent-stack/" class="resource-card">
+        <span class="free-badge">FREE</span>
+        <span class="res-meta">DIAGRAM · ARCHITECTURE</span>
+        <h3>AI Agent — 6 layer stack</h3>
+        <p>The complete diagram of an agent stack that runs in production — Input, Orchestration, LLM, Tools, Output, Infra. Plus production checklist.</p>
+        <span class="arrow">Open the diagram →</span>
+      </a>
+      <a href="/en/claude-api/" class="resource-card">
+        <span class="free-badge">FREE</span>
+        <span class="res-meta">CODE · PYTHON</span>
+        <h3>Claude API in 5 minutes</h3>
+        <p>A full Python snippet for your first call to the Claude API. Line-by-line explanation, multi-turn conversation with memory, and a model selection table.</p>
+        <span class="arrow">Open the snippet →</span>
+      </a>
+      <a href="/en/30-reels/" class="resource-card">
+        <span class="free-badge">FREE</span>
+        <span class="res-meta">TEMPLATE · CLAUDE PROJECT</span>
+        <h3>30 Reels in 4 hours</h3>
+        <p>Claude project setup + 3 prompts that generate, filter and write full scripts for a month of social content.</p>
+        <span class="arrow">Open the template →</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta" id="contact">
+    <h2>Ready to start?</h2>
+    <p>Fill out the form and I'll get back to you soon.</p>
+    <form class="contact-form" action="https://formsubmit.co/zamir.shavit@gmail.com" method="POST">
+      <input type="hidden" name="_subject" value="New inquiry from shavitzamirai.com (EN)" />
+      <input type="hidden" name="_captcha" value="false" />
+      <input type="hidden" name="_next" value="https://shavitzamirai.com/en/?sent=true" />
+      <div class="form-row">
+        <input type="text" name="name" placeholder="Full name" required />
+        <input type="email" name="email" placeholder="Email" required />
+      </div>
+      <div class="form-row">
+        <input type="tel" name="phone" placeholder="Phone (optional)" />
+        <input type="text" name="business_or_role" placeholder="Business or role (optional)" />
+      </div>
+      <textarea name="message" placeholder="How can I help?" rows="4" required></textarea>
+      <button type="submit">Send</button>
+    </form>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2026 Shavit Zamir · <a href="/">עברית</a> · <a href="mailto:zamir.shavit@gmail.com">zamir.shavit@gmail.com</a></p>
+  </footer>
+
+  <script>
+    if (new URLSearchParams(window.location.search).get('sent') === 'true') {
+      const form = document.querySelector('.contact-form');
+      if (form) form.outerHTML = '<p style="color:#22c55e; font-size:18px; font-weight:600; max-width:540px; margin:0 auto;">✓ Message sent. I\'ll get back to you within 48 hours.</p>';
+    }
+
+    const canvas = document.getElementById('neuralCanvas');
+    const ctx = canvas.getContext('2d');
+    function resize() { const hero = canvas.parentElement; canvas.width = hero.offsetWidth; canvas.height = hero.offsetHeight; }
+    resize(); window.addEventListener('resize', resize);
+    function makeNodes() { return Array.from({length:60}, () => ({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-0.5)*0.5,vy:(Math.random()-0.5)*0.5,r:Math.random()*1.8+0.8})); }
+    let nodes = makeNodes();
+    window.addEventListener('resize', () => { nodes = makeNodes(); });
+    function loop() {
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      for (let i=0;i<nodes.length;i++) for (let j=i+1;j<nodes.length;j++) {
+        const dx=nodes[i].x-nodes[j].x, dy=nodes[i].y-nodes[j].y, d=Math.sqrt(dx*dx+dy*dy);
+        if (d<130) { ctx.strokeStyle=`rgba(99,179,255,${(1-d/130)*0.35})`; ctx.lineWidth=0.6; ctx.beginPath(); ctx.moveTo(nodes[i].x,nodes[i].y); ctx.lineTo(nodes[j].x,nodes[j].y); ctx.stroke(); }
+      }
+      nodes.forEach(n => {
+        const grd = ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r*3);
+        grd.addColorStop(0,'rgba(99,179,255,0.9)'); grd.addColorStop(1,'rgba(29,111,245,0)');
+        ctx.beginPath(); ctx.arc(n.x,n.y,n.r*3,0,Math.PI*2); ctx.fillStyle=grd; ctx.fill();
+        ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2); ctx.fillStyle='#63b3ff'; ctx.fill();
+        n.x += n.vx; n.y += n.vy;
+        if (n.x<0||n.x>canvas.width) n.vx*=-1; if (n.y<0||n.y>canvas.height) n.vy*=-1;
+      });
+      requestAnimationFrame(loop);
+    }
+    loop();
+  </script>
+</body>
+</html>
